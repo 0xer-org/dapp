@@ -40,16 +40,13 @@ const withTokenContext = (Component: ComponentType) => (props: any) => {
         .tokenIdOf(account)
         .call();
       const id = parseInt(result);
-      const uri = await contractRef.current.methods.tokenURI(id).call();
-      const json = await fetch(uri).then((response) => response.json());
-      const fetched = { id, uri: json.image };
       setId(id);
       const { data } = await fetch(
         `${SERVER_URL}/0xer/${account}/validation`
       ).then((response) => response.json());
 
       setValues(data);
-      return fetched;
+      return id;
     } catch (e) {
       console.error(e);
     }
@@ -80,8 +77,7 @@ const withTokenContext = (Component: ComponentType) => (props: any) => {
       .claim()
       .send()
       .on("confirmation", async () => {
-        const fetched: any = await fetchTokenInfo();
-        const { tokenId } = fetched || {};
+        const tokenId: any = await fetchTokenInfo();
         // create user record
         fetch(`${SERVER_URL}/0xer/${account}`, {
           method: "POST",

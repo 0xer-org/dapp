@@ -1,5 +1,5 @@
 import { Link as RouterLink } from "react-router-dom";
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Link, Text } from "@chakra-ui/react";
 import logo from "@/assets/images/logo.png";
 import ConnectWallet from "./ConnectWallet";
 
@@ -24,7 +24,9 @@ const Navbar = () => (
         </Flex>
       </RouterLink>
 
-      <RouterLink to="/explore">Explore</RouterLink>
+      <Link _hover={{ textDecor: "none" }} href="/#explore">
+        Explore
+      </Link>
       <RouterLink to="/did">0xDID</RouterLink>
       <RouterLink to="/mission">Mission</RouterLink>
       <RouterLink to="/">Paper</RouterLink>

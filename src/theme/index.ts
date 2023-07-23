@@ -17,6 +17,9 @@ const theme = extendTheme({
   },
   styles: {
     global: {
+      html: {
+        scrollBehavior: "smooth",
+      },
       body: {
         color: "#f5f5f5",
         fontFamily: "Unbounded",
