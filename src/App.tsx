@@ -4,7 +4,8 @@ import withContext from "@/context";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Main from "@/pages/Main";
-import Mission from "@/pages/Mission";
+import Verify from "@/pages/Verify";
+import Invite from "@/pages/Invite";
 import DID from "@/pages/DID";
 
 const App = () => (
@@ -13,7 +14,8 @@ const App = () => (
     <Box marginTop="94px">
       <Switch>
         <Route exact path="/" component={Main} />
-        <Route path="/mission" component={Mission} />
+        <Route path="/mission/1" component={Verify} />
+        <Route path="/mission/2" component={Invite} />
         <Route path="/did" component={DID} />
       </Switch>
     </Box>

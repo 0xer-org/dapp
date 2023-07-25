@@ -1,9 +1,21 @@
-import { Link as RouterLink } from "react-router-dom";
-import { Box, Flex, Image, Link, Text } from "@chakra-ui/react";
+import { withRouter } from "react-router";
+import { Link as RouterLink, RouteComponentProps } from "react-router-dom";
+import {
+  Box,
+  Flex,
+  Image,
+  Link,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+  Text,
+} from "@chakra-ui/react";
 import logo from "@/assets/images/logo.png";
 import ConnectWallet from "./ConnectWallet";
 
-const Navbar = () => (
+const Navbar = ({ history }: { history: RouteComponentProps["history"] }) => (
   <Flex
     height="94px"
     width="100vw"
@@ -28,7 +40,18 @@ const Navbar = () => (
         Explore
       </Link>
       <RouterLink to="/did">0xDID</RouterLink>
-      <RouterLink to="/mission">Mission</RouterLink>
+      <Menu>
+        <MenuButton fontWeight="bold">Mission</MenuButton>
+        <MenuList bg="black">
+          <MenuItem bg="black" onClick={() => history.push("/mission/1")}>
+            #001
+          </MenuItem>
+          <MenuDivider />
+          <MenuItem bg="black" onClick={() => history.push("/mission/2")}>
+            #002
+          </MenuItem>
+        </MenuList>
+      </Menu>
       <RouterLink to="/">Paper</RouterLink>
       <RouterLink to="/">FAQ</RouterLink>
       <RouterLink to="/">Twitter</RouterLink>
@@ -38,4 +61,4 @@ const Navbar = () => (
     </Box>
   </Flex>
 );
-export default Navbar;
+export default withRouter(Navbar);

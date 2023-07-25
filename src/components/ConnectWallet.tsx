@@ -24,18 +24,7 @@ const ConnectWallet = () => {
       {account ? (
         shortenAddress(account)
       ) : (
-        <Button
-          onClick={onOpen}
-          borderColor="white"
-          borderWidth={2}
-          bg="transparent"
-          color="text"
-          fontWeight="bold"
-          px={8}
-          _hover={{
-            bg: "transparent",
-          }}
-        >
+        <Button onClick={onOpen} variant="outline">
           Connect
         </Button>
       )}
