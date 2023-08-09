@@ -32,7 +32,10 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "eject": "craco eject"
+    "eject": "craco eject",
+    "build:staging": "env-cmd -f .env.staging.local craco build",
+    "build:production": "env-cmd -f .env.production.local craco build",
+    "deploy": "gcloud app deploy"
   },
   "eslintConfig": {
     "extends": [
@@ -53,5 +56,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "env-cmd": "^10.1.0"
   }
 }
