@@ -8,6 +8,7 @@ import {
 } from "react";
 import Contract from "web3-eth-contract";
 import ABI from "@/abi.json";
+import { useToast } from "@chakra-ui/react";
 
 interface TokenContextType {
   account?: string;
@@ -19,6 +20,7 @@ interface TokenContextType {
 
 const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS;
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+const CHAIN_ID = parseInt(process.env.REACT_APP_CHAIN_ID || "0", 10);
 
 const TokenContext = createContext<TokenContextType>({
   connect: () => {},
@@ -31,8 +33,10 @@ const withTokenContext = (Component: ComponentType) => (props: any) => {
   const [account, setAccount] = useState<string>();
   const [values, setValues] = useState<string>();
   const [id, setId] = useState<number>();
+  const [chainId, setChainId] = useState<number>();
+  const toast = useToast();
 
-  const fetchTokenInfo = useCallback(async () => {
+  const getTokenId = useCallback(async () => {
     if (!contractRef.current) return;
     if (!account) return;
     try {
@@ -40,17 +44,28 @@ const withTokenContext = (Component: ComponentType) => (props: any) => {
         .tokenIdOf(account)
         .call();
       const id = parseInt(result);
-      setId(id);
-      const { data } = await fetch(
-        `${SERVER_URL}/0xer/${account}/validation`
-      ).then((response) => response.json());
-
-      setValues(data);
       return id;
     } catch (e) {
       console.error(e);
+      return undefined;
     }
   }, [account]);
+
+  const updateTokenInfo = useCallback(
+    async (id?: number) => {
+      if (id) {
+        setId(id);
+        const { data } = await fetch(
+          `${SERVER_URL}/0xer/${account}/validation`
+        ).then((response) => response.json());
+        setValues(data);
+      } else {
+        setId(undefined);
+        setValues("");
+      }
+    },
+    [account]
+  );
 
   const connect = useCallback(async () => {
     providerRef.current = (window as any).ethereum;
@@ -66,6 +81,9 @@ const withTokenContext = (Component: ComponentType) => (props: any) => {
       contractRef.current.setProvider(providerRef.current);
 
       setAccount(accounts[0]);
+
+      const chainId = await provider.request({ method: "eth_chainId" });
+      setChainId(parseInt(chainId, 16));
     } catch (e) {
       console.error(e);
     }
@@ -77,28 +95,39 @@ const withTokenContext = (Component: ComponentType) => (props: any) => {
       .claim()
       .send()
       .on("confirmation", async () => {
-        const tokenId: any = await fetchTokenInfo();
+        const tokenId: any = await getTokenId();
         // create user record
-        fetch(`${SERVER_URL}/0xer/${account}`, {
+        await fetch(`${SERVER_URL}/0xer/${account}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ tokenId }),
-        });
+        })
+          .then((response) => response.json())
+          .then(console.log);
+        updateTokenInfo(tokenId);
       });
     return transactionHash;
-  }, [account, fetchTokenInfo]);
+  }, [account, getTokenId, updateTokenInfo]);
 
   // detect account switch
   useEffect(() => {
     if (!providerRef.current) return;
     const provider = providerRef.current;
-    const handler = (accounts: string[]) => {
+    const accountChangedhandler = (accounts: string[]) => {
       console.log(`Account changed to: ${accounts[0]}`);
       setAccount(accounts[0]);
     };
-    provider.on("accountsChanged", handler);
-    return () => provider.removeListener("accountChanged", handler);
-  }, []);
+    const networkChangedhandler = (networkId: string) => {
+      console.log(`Account changed to: ${networkId}`);
+      setChainId(parseInt(networkId, 10));
+    };
+    provider.on("accountsChanged", accountChangedhandler);
+    provider.on("networkChanged", networkChangedhandler);
+    return () => {
+      provider.removeListener("accountChanged", accountChangedhandler);
+      provider.removeListener("networkChanged", networkChangedhandler);
+    };
+  }, [account]);
 
   // auto wallet connection
   useEffect(() => {
@@ -107,8 +136,20 @@ const withTokenContext = (Component: ComponentType) => (props: any) => {
 
   // check mint status
   useEffect(() => {
-    fetchTokenInfo();
-  }, [fetchTokenInfo]);
+    getTokenId().then(updateTokenInfo);
+  }, [getTokenId, updateTokenInfo]);
+
+  // check chain id
+  useEffect(() => {
+    if (chainId && chainId !== CHAIN_ID) {
+      console.log(chainId, CHAIN_ID);
+      toast({
+        title: "Wrong network detected, please switch to Arbitrum network.",
+        duration: 5000,
+        status: "error",
+      });
+    }
+  }, [chainId, toast]);
 
   return (
     <TokenContext.Provider value={{ account, id, connect, mint, values }}>

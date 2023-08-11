@@ -16,11 +16,11 @@ const DID = () => {
   }, [account, connectWallet]);
 
   useEffect(() => {
-    if (account && preparedToMint) {
+    if (account && !id && preparedToMint) {
       mint();
       setPreparedToMint(false);
     }
-  }, [account, mint, preparedToMint]);
+  }, [account, id, mint, preparedToMint]);
 
   return (
     <Box>
