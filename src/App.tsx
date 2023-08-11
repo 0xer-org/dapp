@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import withContext from "@/context";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import WalletConnectionModal from "@/components/WalletConnectionModal";
 import Main from "@/pages/Main";
 import Verify from "@/pages/Verify";
 import Invite from "@/pages/Invite";
@@ -20,6 +21,7 @@ const App = () => (
       </Switch>
     </Box>
     <Footer />
+    <WalletConnectionModal />
   </Router>
 );
 

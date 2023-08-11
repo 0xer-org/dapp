@@ -1,11 +1,27 @@
-import { useContext } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Box, Button, Center } from "@chakra-ui/react";
 import TokenContext from "@/context/token";
 import NFTIntroduction from "@/components/NFTIntroduction";
 import NFTRenderer from "@/components/NFTRenderer";
+import WalletConnectionContext from "@/context/walletConnection";
 
 const DID = () => {
-  const { id, values, mint } = useContext(TokenContext);
+  const { account, id, values, mint } = useContext(TokenContext);
+  const { connectWallet } = useContext(WalletConnectionContext);
+  const [preparedToMint, setPreparedToMint] = useState(false);
+
+  const connectAndMint = useCallback(() => {
+    if (!account) connectWallet();
+    setPreparedToMint(true);
+  }, [account, connectWallet]);
+
+  useEffect(() => {
+    if (account && preparedToMint) {
+      mint();
+      setPreparedToMint(false);
+    }
+  }, [account, mint, preparedToMint]);
+
   return (
     <Box>
       <Box pt={20} px={5} mb={10}>
@@ -16,7 +32,7 @@ const DID = () => {
           <>
             <Button
               my={3}
-              onClick={mint}
+              onClick={connectAndMint}
               width={750}
               maxW="100%"
               color="black"

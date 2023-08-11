@@ -15,7 +15,7 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react";
 import logo from "@/assets/images/logo.png";
-import ConnectWallet from "./ConnectWallet";
+import ProfileLink from "@/components/ProfileLink";
 import { HamburgerIcon } from "@chakra-ui/icons";
 
 const DesktopNavigation = ({
@@ -110,7 +110,7 @@ const Navbar = ({ history }: { history: RouteComponentProps["history"] }) => {
       <Navigation history={history} />
 
       <Box>
-        <ConnectWallet />
+        <ProfileLink />
       </Box>
     </Flex>
   );
