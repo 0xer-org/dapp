@@ -23,13 +23,15 @@ import NFTIntroduction from "@/components/NFTIntroduction";
 const Main = () => (
   <Box>
     {/* Jumbotron begin */}
-    <Flex height="calc(100vh - 94px)" bg="black" mt="94px">
+    <Flex height="calc(100vh - 94px)" bg="black" mt="94px" px={3}>
       <Flex m="auto" direction="column" align="center">
         <Image src={logo} width={55} />
         <Text fontSize="4xl" pb={3} letterSpacing={5}>
           [0xer]
         </Text>
-        <Text fontSize="2xl">Seal Your Powers On the Blockchain</Text>
+        <Text fontSize="2xl" align="center" lineHeight={2.5}>
+          Seal Your Powers On the Blockchain
+        </Text>
         <Text maxW={800} lineHeight={2} align="center">
           This is a project about seal human capabilities. In the current AI and
           robots digital generation, you and I need a trusted identity to prove
@@ -48,11 +50,17 @@ const Main = () => (
     {/* Jumbotron end */}
 
     {/* Tech stack begin */}
-    <Box bg="black" p={20}>
+    <Box bg="black" p={{ base: 5, lg: 20 }}>
       <Text fontSize="3xl" fontWeight="bold" align="center" letterSpacing={2}>
         BLOCKCHAIN TECHNOLOGY
       </Text>
-      <Flex gap={10} mt={10} mx="auto" width={1200}>
+      <Flex
+        gap={10}
+        mt={10}
+        mx="auto"
+        maxW={1200}
+        direction={{ base: "column", lg: "row" }}
+      >
         <Box
           bg="#393A36"
           py={10}
@@ -118,7 +126,7 @@ const Main = () => (
 
     {/* Introduction begin */}
     <Box id="explore" bg="black" pt="94px">
-      <Box bg="white" p={20}>
+      <Box bg="white" p={{ base: 5, lg: 20 }}>
         <NFTIntroduction />
       </Box>
     </Box>
@@ -126,8 +134,14 @@ const Main = () => (
     {/* Introduction end */}
 
     {/* Progress & Plan begin */}
-    <Flex bg="black" p={20} direction="column" align="center">
-      <Text fontSize="3xl" fontWeight="bold" letterSpacing={2} lineHeight={2}>
+    <Flex bg="black" p={{ base: 5, lg: 20 }} direction="column" align="center">
+      <Text
+        fontSize="3xl"
+        fontWeight="bold"
+        letterSpacing={2}
+        lineHeight={2}
+        align="center"
+      >
         PROGRESS & PLAN
       </Text>
       <Text maxW={750} align="center" my={10}>
@@ -150,20 +164,25 @@ const Main = () => (
     {/* Progress & Plan end */}
 
     {/* Stages begin */}
-    <Tabs display="flex" variant="unstyled" orientation="vertical">
+    <Tabs
+      display="flex"
+      variant="unstyled"
+      orientation="vertical"
+      flexDirection={{ base: "column", lg: "row" }}
+    >
       <Flex flex={3} bg="#393A36">
         <TabList m="auto" p={4} alignItems="flex-start">
-          <Tab>1: PROOF OF HUMANITY</Tab>
-          <Tab>2: BUILD ENCRYPTED YOU</Tab>
-          <Tab>3: CALCULATE YOUR STRENGTH</Tab>
-          <Tab>4: CONTRIBUTE TO THE COMMUNITY</Tab>
-          <Tab>5: HUMAN-CENTERED ECONOMICS</Tab>
-          <Tab>6: BRIDGING WEB2 & WEB3</Tab>
-          <Tab>7: LIVING IN A PERPETUAL NETWORK</Tab>
+          <Tab textAlign="left">1: PROOF OF HUMANITY</Tab>
+          <Tab textAlign="left">2: BUILD ENCRYPTED YOU</Tab>
+          <Tab textAlign="left">3: CALCULATE YOUR STRENGTH</Tab>
+          <Tab textAlign="left">4: CONTRIBUTE TO THE COMMUNITY</Tab>
+          <Tab textAlign="left">5: HUMAN-CENTERED ECONOMICS</Tab>
+          <Tab textAlign="left">6: BRIDGING WEB2 & WEB3</Tab>
+          <Tab textAlign="left">7: LIVING IN A PERPETUAL NETWORK</Tab>
         </TabList>
       </Flex>
 
-      <TabPanels flex={4} bg="#21221D" p={20} height={600}>
+      <TabPanels flex={4} bg="#21221D" p={{ base: 5, lg: 20 }} height={600}>
         <TabPanel>
           <Text my={3}>
             The task of the 0xer in this stage is to prove himself as a real

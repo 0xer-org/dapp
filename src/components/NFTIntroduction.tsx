@@ -7,7 +7,7 @@ const NFTIntroduction = () => (
     <Text fontSize="3xl" align="center" my={3} color="black" fontWeight="black">
       0xer NFT
     </Text>
-    <Text align="center" color="black" width={750}>
+    <Text align="center" color="black" maxW={750}>
       NFT provides people with a unique and fully transparent storage mechanism.
       0xer's NFT is an open protocol like DNA on the Internet, storing data that
       each person voluntarily provides, and each person will have full access to

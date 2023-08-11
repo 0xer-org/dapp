@@ -9,7 +9,13 @@ import {
 
 const Invite = () => {
   return (
-    <Flex height="calc(100vh - 94px)" bg="black" p={12} gap={16}>
+    <Flex
+      minH="calc(100vh - 94px)"
+      bg="black"
+      p={12}
+      gap={16}
+      direction={{ base: "column", lg: "row" }}
+    >
       <Box flex={2}>
         <Text fontSize="xl">Mission #001</Text>
         <Text fontSize="4xl" fontWeight="bold" my={2}>

@@ -3,7 +3,8 @@ import lock from "@/assets/images/lock.png";
 
 interface NFTRendererProps {
   values?: string;
-  size?: number;
+  // @todo: better typings
+  size?: any;
 }
 
 const VALUE_START_X = 65;
