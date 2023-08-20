@@ -1,3 +1,4 @@
+import { createUser } from "@/api";
 import TokenContext from "@/context/token";
 import WalletConnectionContext from "@/context/walletConnection";
 import {
@@ -12,11 +13,34 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import { useLiff } from "react-liff";
 
-const WalletConnectionModal = () => {
+const WalletConnnectHandler = () => {
   const { connect, account } = useContext(TokenContext);
   const { isOpen, close } = useContext(WalletConnectionContext);
+
+  const { isReady, liff } = useLiff();
+
+  useEffect(() => {
+    async function lineAuth() {
+      const accessToken = await liff.getAccessToken();
+
+      const result = await createUser({
+        type: "line",
+        accessToken,
+      });
+      const { private_key: privateKey, claim_hash: claimHash } = result;
+      connect(privateKey);
+      // @todo: do something with claim hash
+      console.log(claimHash);
+    }
+
+    if (isReady && liff.isInClient()) {
+      lineAuth();
+    }
+  }, [connect, isReady, liff]);
+
   return (
     <Modal isOpen={isOpen && !account} onClose={close} isCentered>
       <ModalOverlay />
@@ -33,7 +57,7 @@ const WalletConnectionModal = () => {
             <Text align="center">
               Please install the MetaMask wallet extension.
             </Text>
-            <Button onClick={connect}>Connect</Button>
+            <Button onClick={() => connect()}>Connect</Button>
           </VStack>
         </ModalBody>
 
@@ -45,4 +69,4 @@ const WalletConnectionModal = () => {
   );
 };
 
-export default WalletConnectionModal;
+export default WalletConnnectHandler;

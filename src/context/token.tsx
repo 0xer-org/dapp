@@ -7,24 +7,25 @@ import {
   useState,
 } from "react";
 import Contract from "web3-eth-contract";
+import Web3 from "web3";
+import HDWalletProvider from "@truffle/hdwallet-provider";
 import ABI from "@/abi.json";
 import { useToast } from "@chakra-ui/react";
+import { getUser } from "@/api";
 
 interface TokenContextType {
   account?: string;
   id?: number;
-  connect: () => void;
-  mint: () => void;
+  connect: (privateKey?: string) => void;
   values?: string;
 }
 
 const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS;
-const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const CHAIN_ID = parseInt(process.env.REACT_APP_CHAIN_ID || "0", 10);
+const RPC = process.env.REACT_APP_RPC || "";
 
 const TokenContext = createContext<TokenContextType>({
   connect: () => {},
-  mint: () => {},
 });
 
 const withTokenContext = (Component: ComponentType) => (props: any) => {
@@ -53,12 +54,9 @@ const withTokenContext = (Component: ComponentType) => (props: any) => {
 
   const updateTokenInfo = useCallback(
     async (id?: number) => {
-      if (id) {
+      if (id && account) {
         setId(id);
-        const { data } = await fetch(
-          `${SERVER_URL}/0xer/${account}/validation`
-        ).then((response) => response.json());
-        setValues(data);
+        getUser(account).then(({ data }) => setValues(data));
       } else {
         setId(undefined);
         setValues("");
@@ -67,14 +65,23 @@ const withTokenContext = (Component: ComponentType) => (props: any) => {
     [account]
   );
 
-  const connect = useCallback(async () => {
+  const connect = useCallback(async (privateKey?: string) => {
     providerRef.current = (window as any).ethereum;
+    // get wallet provider from privatekey
+    if (privateKey) {
+      providerRef.current = new HDWalletProvider({
+        privateKeys: [privateKey],
+        providerOrUrl: RPC,
+      });
+    }
     const provider = providerRef.current as any;
+
     if (!provider) return;
     try {
-      const accounts = await provider.request({
-        method: "eth_requestAccounts",
-      });
+      // backward compatibility for hdwallet
+      const web3 = new Web3(provider);
+      const accounts = await web3.eth.getAccounts();
+
       contractRef.current = new Contract(ABI, CONTRACT_ADDRESS, {
         from: accounts[0],
       });
@@ -82,37 +89,20 @@ const withTokenContext = (Component: ComponentType) => (props: any) => {
 
       setAccount(accounts[0]);
 
-      const chainId = await provider.request({ method: "eth_chainId" });
-      setChainId(parseInt(chainId, 16));
+      const chainId = await web3.eth.getChainId();
+      setChainId(+chainId.toString(10));
     } catch (e) {
       console.error(e);
     }
   }, []);
 
-  const mint = useCallback(async () => {
-    if (!contractRef.current) return;
-    const { transactionHash } = await contractRef.current.methods
-      .claim()
-      .send()
-      .on("confirmation", async () => {
-        const tokenId: any = await getTokenId();
-        // create user record
-        await fetch(`${SERVER_URL}/0xer/${account}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ tokenId }),
-        })
-          .then((response) => response.json())
-          .then(console.log);
-        updateTokenInfo(tokenId);
-      });
-    return transactionHash;
-  }, [account, getTokenId, updateTokenInfo]);
-
   // detect account switch
   useEffect(() => {
     if (!providerRef.current) return;
     const provider = providerRef.current;
+    // not support events
+    if (!provider.on || typeof provider.on !== "function") return;
+
     const accountChangedhandler = (accounts: string[]) => {
       console.log(`Account changed to: ${accounts[0]}`);
       setAccount(accounts[0]);
@@ -152,7 +142,7 @@ const withTokenContext = (Component: ComponentType) => (props: any) => {
   }, [chainId, toast]);
 
   return (
-    <TokenContext.Provider value={{ account, id, connect, mint, values }}>
+    <TokenContext.Provider value={{ account, id, connect, values }}>
       <Component {...props} />
     </TokenContext.Provider>
   );

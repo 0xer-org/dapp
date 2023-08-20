@@ -4,9 +4,10 @@ import TokenContext from "@/context/token";
 import NFTIntroduction from "@/components/NFTIntroduction";
 import NFTRenderer from "@/components/NFTRenderer";
 import WalletConnectionContext from "@/context/walletConnection";
+import { createUser } from "@/api";
 
 const DID = () => {
-  const { account, id, values, mint } = useContext(TokenContext);
+  const { account, id, values } = useContext(TokenContext);
   const { connectWallet } = useContext(WalletConnectionContext);
   const [preparedToMint, setPreparedToMint] = useState(false);
 
@@ -17,10 +18,10 @@ const DID = () => {
 
   useEffect(() => {
     if (account && !id && preparedToMint) {
-      mint();
+      createUser({ type: "wallet", address: account }).then(console.log);
       setPreparedToMint(false);
     }
-  }, [account, id, mint, preparedToMint]);
+  }, [account, id, preparedToMint]);
 
   return (
     <Box>
