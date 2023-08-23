@@ -1,10 +1,11 @@
 import { useCallback, useContext, useEffect, useState } from "react";
-import { Box, Button, Center } from "@chakra-ui/react";
+import { Box, Button, Center, VStack } from "@chakra-ui/react";
 import TokenContext from "@/context/token";
 import NFTIntroduction from "@/components/NFTIntroduction";
 import NFTRenderer from "@/components/NFTRenderer";
 import WalletConnectionContext from "@/context/walletConnection";
 import { createUser } from "@/api";
+import { shortenAddress } from "@/libs";
 
 const DID = () => {
   const { account, id, values } = useContext(TokenContext);
@@ -25,14 +26,13 @@ const DID = () => {
 
   return (
     <Box>
-      <Box pt={20} px={5} mb={10}>
+      <Box pt={20} px={5} mb={2}>
         <NFTIntroduction />
       </Box>
       <Center flexDirection="column" mb={20} px={5}>
-        {!!id || (
-          <>
+        {!id ? (
+          <VStack my={8} gap={4}>
             <Button
-              my={3}
               onClick={connectAndMint}
               width={750}
               maxW="100%"
@@ -43,7 +43,6 @@ const DID = () => {
               MINT YOUR 0xer NFT Now
             </Button>
             <Button
-              my={3}
               width={750}
               maxW="100%"
               color="black"
@@ -52,7 +51,20 @@ const DID = () => {
             >
               EXPLORE 0xer NFT
             </Button>
-          </>
+          </VStack>
+        ) : (
+          <Center
+            my={5}
+            py={3}
+            width={750}
+            maxW="100%"
+            color="black"
+            bg="white"
+            borderRadius={4}
+          >
+            <Box mr={2}>Owner</Box>
+            <Box fontWeight="bold">{shortenAddress(account || "")}</Box>
+          </Center>
         )}
         <NFTRenderer values={values} size={{ base: "100%", lg: 750 }} />
       </Center>

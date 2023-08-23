@@ -4,6 +4,7 @@ import { CheckIcon } from "@chakra-ui/icons";
 const CompletedIcon = ({ checked }: { checked?: boolean }) => (
   <Box
     width="20px"
+    display={{ base: "none", lg: "block" }}
     height="20px"
     borderRadius="50%"
     bg={checked ? "white" : "#393A36"}

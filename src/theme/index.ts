@@ -8,6 +8,7 @@ const theme = extendTheme({
     Button: {
       baseStyle: {
         textTransform: "uppercase",
+        borderRadius: 3,
       },
       variants: {
         outline: {
@@ -38,6 +39,7 @@ const theme = extendTheme({
       },
       body: {
         color: "#f5f5f5",
+        background: "#F7F7F7",
         fontFamily: "Unbounded",
       },
     },
