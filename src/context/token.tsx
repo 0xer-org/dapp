@@ -89,8 +89,43 @@ const withTokenContext = (Component: ComponentType) => (props: any) => {
 
       setAccount(accounts[0]);
 
-      const chainId = await web3.eth.getChainId();
-      setChainId(+chainId.toString(10));
+      let chainIdBN = await web3.eth.getChainId();
+      let currentChaindId = +chainIdBN.toString(10);
+      if (currentChaindId && currentChaindId !== CHAIN_ID) {
+        try {
+          await provider.request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: "0x" + CHAIN_ID.toString(16) }],
+          });
+        } catch (switchError: any) {
+          // This error code indicates that the chain has not been added to MetaMask.
+          if (switchError.code === 4902) {
+            try {
+              await provider.request({
+                method: "wallet_addEthereumChain",
+                params: [
+                  {
+                    chainId: CHAIN_ID,
+                    chainName: "Arbitrum",
+                    rpcUrls: ["https://arb1.arbitrum.io/rpc"],
+                  },
+                ],
+              });
+              await provider.request({
+                method: "wallet_switchEthereumChain",
+                params: [{ chainId: "0x" + CHAIN_ID.toString(16) }],
+              });
+            } catch (addError) {
+              // handle "add" error
+            }
+          }
+          // handle other "switch" errors
+        }
+        chainIdBN = await web3.eth.getChainId();
+        currentChaindId = +chainIdBN.toString(10);
+      }
+
+      setChainId(+currentChaindId.toString(10));
     } catch (e) {
       console.error(e);
     }
@@ -132,7 +167,6 @@ const withTokenContext = (Component: ComponentType) => (props: any) => {
   // check chain id
   useEffect(() => {
     if (chainId && chainId !== CHAIN_ID) {
-      console.log(chainId, CHAIN_ID);
       toast({
         title: "Wrong network detected, please switch to Arbitrum network.",
         duration: 5000,
