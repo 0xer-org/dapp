@@ -1,22 +1,30 @@
 import { extendTheme } from "@chakra-ui/react";
 import { tabsTheme } from "./tabs";
 import { modalTheme } from "./modal";
-import { accordionTheme } from "./accordion";
+import { inputTheme } from "./input";
 
 const theme = extendTheme({
   components: {
     Button: {
       baseStyle: {
-        textTransform: "uppercase",
-        borderRadius: 3,
+        borderRadius: 0,
       },
       variants: {
-        outline: {
+        outlineDark: {
           borderColor: "white",
-          borderWidth: 2,
+          borderWidth: 3,
           bg: "transparent",
           color: "text",
-          fontWeight: "bold",
+          px: 8,
+          _hover: {
+            bg: "transparent",
+          },
+        },
+        outline: {
+          borderColor: "black",
+          borderWidth: 2,
+          bg: "transparent",
+          color: "black",
           px: 8,
           _hover: {
             bg: "transparent",
@@ -26,7 +34,7 @@ const theme = extendTheme({
     },
     Tabs: tabsTheme,
     Modal: modalTheme,
-    Accordion: accordionTheme,
+    Input: inputTheme,
   },
   colors: {
     text: "#f5f5f5",
@@ -41,6 +49,9 @@ const theme = extendTheme({
         color: "#f5f5f5",
         background: "#F7F7F7",
         fontFamily: "Unbounded",
+      },
+      ".grecaptcha-badge": {
+        visibility: "hidden",
       },
     },
   },

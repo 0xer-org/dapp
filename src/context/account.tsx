@@ -13,10 +13,14 @@ import ABI from "@/abi.json";
 import { useToast } from "@chakra-ui/react";
 import { getUser } from "@/api";
 
-interface TokenContextType {
+interface AccountContextType {
   account?: string;
   id?: number;
+  sign: (message: string) => Promise<string | null>;
   connect: (privateKey?: string) => void;
+  getTokenId: () => Promise<number | undefined>;
+  fetchValues: () => Promise<string | undefined>;
+  setValues: (param: string) => void;
   values?: string;
 }
 
@@ -24,11 +28,15 @@ const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS;
 const CHAIN_ID = parseInt(process.env.REACT_APP_CHAIN_ID || "0", 10);
 const RPC = process.env.REACT_APP_RPC || "";
 
-const TokenContext = createContext<TokenContextType>({
+const AccountContext = createContext<AccountContextType>({
   connect: () => {},
+  sign: async () => null,
+  getTokenId: async () => undefined,
+  fetchValues: async () => undefined,
+  setValues: () => undefined,
 });
 
-const withTokenContext = (Component: ComponentType) => (props: any) => {
+const withAccountContext = (Component: ComponentType) => (props: any) => {
   const providerRef = useRef<any>();
   const contractRef = useRef<any>();
   const [account, setAccount] = useState<string>();
@@ -45,6 +53,7 @@ const withTokenContext = (Component: ComponentType) => (props: any) => {
         .tokenIdOf(account)
         .call();
       const id = parseInt(result);
+      setId(id);
       return id;
     } catch (e) {
       console.error(e);
@@ -52,18 +61,13 @@ const withTokenContext = (Component: ComponentType) => (props: any) => {
     }
   }, [account]);
 
-  const updateTokenInfo = useCallback(
-    async (id?: number) => {
-      if (id && account) {
-        setId(id);
-        getUser(account).then(({ data }) => setValues(data));
-      } else {
-        setId(undefined);
-        setValues("");
-      }
-    },
-    [account]
-  );
+  const fetchValues = useCallback(async () => {
+    if (account) {
+      const { data } = await getUser(account);
+      setValues(data);
+      return data;
+    }
+  }, [account]);
 
   const connect = useCallback(async (privateKey?: string) => {
     providerRef.current = (window as any).ethereum;
@@ -131,6 +135,26 @@ const withTokenContext = (Component: ComponentType) => (props: any) => {
     }
   }, []);
 
+  const sign = useCallback(
+    async (message: string) => {
+      providerRef.current = (window as any).ethereum;
+      const provider = providerRef.current as any;
+      if (!provider) return null;
+      if (account) {
+        const web3 = new Web3(provider);
+        // @ts-expect-error
+        const result = await web3.eth.personal.sign(
+          web3.utils.utf8ToHex(message),
+          account,
+          ""
+        );
+        return typeof result === "string" ? result : result.signature;
+      }
+      return null;
+    },
+    [account]
+  );
+
   // detect account switch
   useEffect(() => {
     if (!providerRef.current) return;
@@ -156,13 +180,8 @@ const withTokenContext = (Component: ComponentType) => (props: any) => {
 
   // auto wallet connection
   useEffect(() => {
-    // connect();
+    connect();
   }, [connect]);
-
-  // check mint status
-  useEffect(() => {
-    getTokenId().then(updateTokenInfo);
-  }, [getTokenId, updateTokenInfo]);
 
   // check chain id
   useEffect(() => {
@@ -176,11 +195,22 @@ const withTokenContext = (Component: ComponentType) => (props: any) => {
   }, [chainId, toast]);
 
   return (
-    <TokenContext.Provider value={{ account, id, connect, values }}>
+    <AccountContext.Provider
+      value={{
+        account,
+        id,
+        connect,
+        sign,
+        getTokenId,
+        fetchValues,
+        setValues,
+        values,
+      }}
+    >
       <Component {...props} />
-    </TokenContext.Provider>
+    </AccountContext.Provider>
   );
 };
 
-export default TokenContext;
-export { withTokenContext };
+export default AccountContext;
+export { withAccountContext };

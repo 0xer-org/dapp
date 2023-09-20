@@ -1,59 +1,108 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Image,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, Image, Text } from "@chakra-ui/react";
+import arbitrumLogo from "@/assets/images/arbitrum.png";
+import ChapterAccordion from "@/components/ChapterAccordion";
+import { RouteComponentProps } from "react-router-dom";
+import NFTRenderer from "@/components/NFTRenderer";
 import logo from "@/assets/images/logo.png";
-import stage0 from "@/assets/images/stage-0.png";
-import stage1 from "@/assets/images/stage-1.png";
-import stage2 from "@/assets/images/stage-2.png";
-import stage3 from "@/assets/images/stage-3.png";
-import stage4 from "@/assets/images/stage-4.png";
-import stage5 from "@/assets/images/stage-5.png";
-import stage6 from "@/assets/images/stage-6.png";
-import NFTIntroduction from "@/components/NFTIntroduction";
 
-const Main = () => (
+const Main = ({ history }: { history: RouteComponentProps["history"] }) => (
   <Box>
     {/* Jumbotron begin */}
     <Flex height="calc(100vh - 94px)" bg="black" mt="94px" px={3}>
       <Flex m="auto" direction="column" align="center">
-        <Image src={logo} width={55} />
-        <Text fontSize="4xl" pb={3} letterSpacing={5}>
-          [0xer]
+        <Text fontSize="3xl" pb={3} letterSpacing={5} lineHeight={1.2}>
+          0xer Decentralized Nexus of Authenticity
         </Text>
-        <Text fontSize="2xl" align="center" lineHeight={2.5}>
-          Seal Your Powers On the Blockchain
+
+        <Text
+          maxW={800}
+          lineHeight={{ base: 1.5, md: 2 }}
+          align={{ base: "left", md: "center" }}
+          color="#9EABB5"
+          fontSize={{ base: "sm", md: "large" }}
+        >
+          Thou hast journeyed through life's realms, physical, digital, social,
+          and spiritual. Now is the time to gather the scattered footprints and
+          forge, upon the blockchain, an identity anonymous yet trustworthy,
+          unique and true to thyself. This reborn identity shall be a key to
+          unlock the gates of the multiverse.
         </Text>
-        <Text maxW={800} lineHeight={2} align="center">
-          This is a project about seal human capabilities. In the current AI and
-          robots digital generation, you and I need a trusted identity to prove
-          we are unique in the world and build a network of trust between humans
-          together.
+        {/* @todo: get number from contract */}
+        <Text mt={{ base: 2, md: 10 }} fontSize="4xl">
+          12345
         </Text>
         <Button
           mt={5}
-          variant="outline"
-          onClick={() => document.getElementById("explore")?.scrollIntoView()}
+          variant="outlineDark"
+          width={300}
+          fontSize="sm"
+          onClick={() => history.push("/proof-of-humanity")}
         >
-          Explore
+          Mint Your NFT
         </Button>
+        <Text mt={2}>Free gas for minting NFT</Text>
+        <Image my={5} width="5rem" src={arbitrumLogo} />
       </Flex>
     </Flex>
     {/* Jumbotron end */}
 
-    {/* Tech stack begin */}
-    <Box bg="black" p={{ base: 5, lg: 20 }}>
-      <Text fontSize="3xl" fontWeight="bold" align="center" letterSpacing={2}>
-        BLOCKCHAIN TECHNOLOGY
+    {/* DNA begin */}
+    <Box p={{ base: 5, lg: 20 }}>
+      <Flex
+        my={10}
+        direction={{ base: "column", md: "row" }}
+        mx="auto"
+        maxW={1440}
+      >
+        <Box flex={1}>
+          <NFTRenderer
+            size={{ base: "100%", lg: 750 }}
+            values={new Array(256).fill("00").join("")}
+          />
+        </Box>
+        <Box px={{ base: 2, md: 10 }}>
+          <Text fontSize="3xl" my={3} color="black" fontWeight="black">
+            NFT: 0xer DNA
+          </Text>
+          <Text color="black" lineHeight={2}>
+            The 0xer DNA (Decentralized Nexus of Authenticity) is an anonymized
+            soul-bound NFT on the blockchain, recording your public identity,
+            traits, abilities, preferences, and various other information in a
+            hexadecimal format (0-255) The 0xer DNA NFT employs on-chain
+            blockchain technology to store the data that you have made public.
+            This system provides a total of 16x16=256 numerical storage spaces,
+            specifically designed to depict the unique characteristics of an
+            individual. Of these, 10 spaces have currently been made accessible.
+            The numerical values representing these traits can be sourced from
+            publicly available data (such as data on the blockchain) or can be
+            acquired by the individual through the completion of specific tasks.
+          </Text>
+          <Flex justify={{ base: "center", md: "flex-start" }}>
+            <Button
+              onClick={() => history.push("/proof-of-humanity")}
+              mt={5}
+              variant="outline"
+            >
+              Mint Your NFT
+            </Button>
+          </Flex>
+        </Box>
+      </Flex>
+    </Box>
+    {/* DNA end */}
+
+    {/* Introduction begin */}
+    <Box bg="black" p={{ base: 0, lg: 20 }}>
+      <Text
+        fontSize="3xl"
+        p={5}
+        fontWeight="bold"
+        align="center"
+        letterSpacing={2}
+      >
+        Seal and encrypt the concept of You into the 0xer NFT
       </Text>
+      <Image src={logo} mt={8} width="100px" mx="auto" />
       <Flex
         gap={10}
         mt={10}
@@ -67,18 +116,19 @@ const Main = () => (
           px={8}
           flex={1}
           borderRadius="5px"
-          textAlign="center"
           cursor="pointer"
           _hover={{ bg: "#52534F" }}
         >
-          <Text decoration="underline" fontSize="2xl" mb={2}>
-            ERC-6551
+          <Text decoration="underline" fontSize="2xl" mb={4} textAlign="center">
+            0x
           </Text>
-          <Text fontSize="xl">
-            0xer believes that Web2 or Web3 are both important technologies for
-            the Web and are different places of people's conscious existence.
-            With the ERC-6551, the interactive process can be more
-            user-friendly. Our goal is to maximize service to all people.
+          <Text fontSize="md" textAlign="left">
+            The prefix "0x" is commonly associated with hexadecimal notation. In
+            the context of the 0xer DNA, it symbolizes the hexadecimal encoding,
+            reflecting the idea that the project utilizes blockchain encryption
+            technology for data preservation. This 16-base numerical system is
+            widely used in computer science, and its application here emphasizes
+            the digital and technological foundation of the project.
           </Text>
         </Box>
         <Box
@@ -87,17 +137,19 @@ const Main = () => (
           px={8}
           flex={1}
           borderRadius="5px"
-          textAlign="center"
           cursor="pointer"
           _hover={{ bg: "#52534F" }}
         >
-          <Text decoration="underline" fontSize="2xl" mb={2}>
-            Soulbound Token
+          <Text decoration="underline" fontSize="2xl" mb={4} textAlign="center">
+            0x(er)
           </Text>
-          <Text fontSize="xl">
-            Soul-bound tokens (SBTs) are data-transparent and non-tradable, and
-            are used as the basis for personalized identification on the
-            Internet and the development of trusted network nodes.
+          <Text fontSize="md" textAlign="left">
+            The "er" enclosed in parentheses signifies the individual human
+            entity, with various attributes and characteristics. The parentheses
+            imply a function-like concept, where "er" represents a range of
+            human traits that can be quantified and computed. This encapsulates
+            the project's goal of translating human individuality into a format
+            that can be processed and utilized by system and AI algorithms.
           </Text>
         </Box>
         <Box
@@ -106,114 +158,224 @@ const Main = () => (
           px={8}
           flex={1}
           borderRadius="5px"
-          textAlign="center"
           cursor="pointer"
           _hover={{ bg: "#52534F" }}
         >
-          <Text decoration="underline" fontSize="2xl" mb={2}>
-            Loot-like NFT
+          <Text decoration="underline" fontSize="2xl" mb={4} textAlign="center">
+            {"{0x(er)}"}
           </Text>
-          <Text fontSize="xl">
-            The Loot Project has demonstrated the possibility of openness and
-            co-creation in gaming applications. 0xer supports people to store
-            parts of their abilities, traits and skills on the blockchain via
-            NFT based on a zero-knowledge technology.
+          <Text fontSize="md" textAlign="left">
+            The curly braces typically denote a set in mathematics and
+            computing. In the context of 0xer, they symbolize the collective set
+            of all human individuals within the multiverse, forming a
+            decentralized society (DeSoc). This signifies the inclusiveness and
+            universality of the project, emphasizing the interconnectedness of
+            individual entities within a broader community.
           </Text>
         </Box>
       </Flex>
+      <Text mx="auto" py={10} maxW={800} align="center">
+        By furnishing publicly accessible or authorized individual trait
+        numerical data, a programmable data nexus is formed. Each individual
+        enhances the value of their NFT by establishing a more comprehensive
+        record within the NFT, thereby augmenting the overall worth of the NFT.
+      </Text>
     </Box>
-    {/* Tech stack end */}
-
-    {/* Introduction begin */}
-    <Box id="explore" bg="black" pt="94px">
-      <Box bg="white" p={{ base: 5, lg: 20 }}>
-        <NFTIntroduction />
-      </Box>
-    </Box>
-
     {/* Introduction end */}
 
-    {/* Progress & Plan begin */}
-    <Flex bg="black" p={{ base: 5, lg: 20 }} direction="column" align="center">
+    {/* Tasks begin */}
+    <Box p={{ base: 0, lg: 20 }}>
       <Text
+        color="black"
         fontSize="3xl"
+        p={5}
         fontWeight="bold"
-        letterSpacing={2}
-        lineHeight={2}
         align="center"
+        letterSpacing={2}
       >
-        PROGRESS & PLAN
+        Accept the tasks to begin storing data for your DNA NFT
       </Text>
-      <Text maxW={750} align="center" my={10}>
-        The Bitcoin network was born on January 3, 2009, when Satoshi Nakamoto
-        mined the "Genesis'' block. We use the block height of Bitcoin as a
-        common time standard for the entire 0xer community. The biblical chapter
-        of Genesis uses seven days to create the world, and we also divide an
-        ideal 0xverse into seven chapters of development.
+      <Text
+        fontSize="2xl"
+        color="black"
+        p={5}
+        fontWeight="bold"
+        align="center"
+        letterSpacing={2}
+      >
+        Ongoing Tasks
       </Text>
-      <Flex gap={3} my={3}>
-        {[stage0, stage1, stage2, stage3, stage4, stage5, stage6].map(
-          (image, index) => (
-            <Box flex={1} key={index}>
-              <Image src={image} width="60px" />
-            </Box>
-          )
-        )}
-      </Flex>
-    </Flex>
-    {/* Progress & Plan end */}
-
-    {/* Stages begin */}
-    <Tabs
-      display="flex"
-      variant="unstyled"
-      orientation="vertical"
-      flexDirection={{ base: "column", lg: "row" }}
-    >
-      <Flex flex={3} bg="#393A36">
-        <TabList m="auto" p={4} alignItems="flex-start">
-          <Tab textAlign="left">1: PROOF OF HUMANITY</Tab>
-          <Tab textAlign="left">2: BUILD ENCRYPTED YOU</Tab>
-          <Tab textAlign="left">3: CALCULATE YOUR STRENGTH</Tab>
-          <Tab textAlign="left">4: CONTRIBUTE TO THE COMMUNITY</Tab>
-          <Tab textAlign="left">5: HUMAN-CENTERED ECONOMICS</Tab>
-          <Tab textAlign="left">6: BRIDGING WEB2 & WEB3</Tab>
-          <Tab textAlign="left">7: LIVING IN A PERPETUAL NETWORK</Tab>
-        </TabList>
-      </Flex>
-
-      <TabPanels flex={4} bg="#21221D" p={{ base: 5, lg: 20 }} height={600}>
-        <TabPanel>
-          <Text my={3}>
-            The task of the 0xer in this stage is to prove himself as a real
-            human being in the anonymous digital world. There are a total of 10
-            levels of tests, which are currently known to be a good way to prove
-            that you are human. Any methods of communication with the physical
-            world, such as SMS verification, email verification, etc., will not
-            be used here.
+      <Flex
+        gap={10}
+        mt={10}
+        mx="auto"
+        maxW={1200}
+        direction={{ base: "column", lg: "row" }}
+        p={5}
+      >
+        <Flex
+          border="1px solid black"
+          direction="column"
+          p={6}
+          flex={1}
+          borderRadius="5px"
+          cursor="pointer"
+        >
+          <Text fontSize="2xl" fontWeight="bold" color="black" mb={2}>
+            #001
           </Text>
-          <Box>
-            <Text>Level 1: Basic Response </Text>
-            <Text>Level 2: Number Recognition</Text>
-            <Text>Level 3: Text input</Text>
-            <Text>Level 4: Graphical recognition</Text>
-            <Text>Level 5: Motion</Text>
-            <Text>Level 6: Calculation</Text>
-            <Text>Level 7: Google Authenticator</Text>
-            <Text>Level 8: Face Recognition</Text>
-            <Text>Level 9: iOS/Android Fingerprint</Text>
-            <Text>Level 10: Worldcoin Orb Biometrics</Text>
-          </Box>
-        </TabPanel>
-        <TabPanel></TabPanel>
-        <TabPanel></TabPanel>
-        <TabPanel></TabPanel>
-        <TabPanel></TabPanel>
-        <TabPanel></TabPanel>
-        <TabPanel></TabPanel>
-      </TabPanels>
-    </Tabs>
-    {/* Stages end */}
+          <Text fontSize="lg" fontWeight="bold" color="black" mb={4}>
+            Proof of Humanity
+          </Text>
+          <Text fontSize="md" color="black" mb={8} flex={1}>
+            By passing human verification checkpoints of varying difficulty
+            levels, it represents your credibility as a genuine human being.
+          </Text>
+          <Button
+            onClick={() => history.push("/proof-of-humanity")}
+            width="100%"
+            color="black"
+            border="1px solid black"
+            fontWeight="normal"
+            bg="white"
+          >
+            Start
+          </Button>
+        </Flex>
+        <Flex
+          border="1px solid black"
+          direction="column"
+          p={6}
+          flex={1}
+          borderRadius="5px"
+          cursor="pointer"
+        >
+          <Text fontSize="2xl" fontWeight="bold" color="black" mb={2}>
+            #002
+          </Text>
+          <Text fontSize="lg" fontWeight="bold" color="black" mb={4}>
+            Community contribution
+          </Text>
+          <Text fontSize="md" color="black" mb={8} flex={1}>
+            Trust that you know where to find more quality humans; now, send
+            your exclusive code to them. When they join, they will establish an
+            on-chain relationship with you. The more people you invite, the
+            higher your contribution value will be.
+          </Text>
+          <Button
+            onClick={() => history.push("/community-contribution")}
+            width="100%"
+            color="black"
+            border="1px solid black"
+            fontWeight="normal"
+            bg="white"
+          >
+            Start
+          </Button>
+        </Flex>
+        <Flex
+          border="1px solid black"
+          direction="column"
+          p={6}
+          flex={1}
+          borderRadius="5px"
+          cursor="pointer"
+        >
+          <Text fontSize="2xl" fontWeight="bold" color="black" mb={2}>
+            #003
+          </Text>
+          <Text fontSize="lg" fontWeight="bold" color="black" mb={4}>
+            Web3 Knowledge Test
+          </Text>
+          <Text fontSize="md" color="black" mb={8} flex={1}>
+            This task consists of 100 multiple-choice questions about Web3,
+            testing your understanding of Web3 knowledge. Only those who have
+            personally experienced it can pass this trial.
+          </Text>
+          <Button
+            onClick={() => history.push("/web3-knowledge-test")}
+            width="100%"
+            color="black"
+            border="1px solid black"
+            fontWeight="normal"
+            bg="white"
+          >
+            Start
+          </Button>
+        </Flex>
+      </Flex>
+      <Text color="black" align="center" p={2} maxW={900} mx="auto">
+        When you complete each task, the value of the NFT will change
+        accordingly, and you can decide when to update it on chain.
+      </Text>
+    </Box>
+    {/* Tasks end */}
+
+    {/* Plan begin */}
+    <Flex
+      bg="black"
+      p={{ base: 0, lg: 20 }}
+      flexDirection={{ base: "column", lg: "row" }}
+      alignItems="center"
+      justify="center"
+    >
+      <Text align="center" fontSize="3xl" fontWeight="bold" my={3} p={10}>
+        The Plan
+      </Text>
+
+      {/* @todo: chapters content */}
+      <ChapterAccordion
+        chapters={[
+          {
+            chapter: 1,
+            title: "Identifying Real Humans and Binding to DNA NFT",
+            content: `In an era dominated by the capabilities of generative AI,
+        distinguishing between robots and real humans has become
+        increasingly difficult. However, human authenticity serves as
+        the cornerstone for building a network of trust within the 0xer
+        universe. We take a multi-layered approach to human
+        verification, using advanced technologies to authenticate online
+        behavior, digital assets, social graphs and biometrics. This
+        allows individuals to achieve higher levels of human
+        authenticity based on their preferences and the intersection of
+        multiple verification results.`,
+          },
+          {
+            chapter: 2,
+            title:
+              "Aggregate More Important Human Characteristics into On-Chain Data",
+            content: "",
+          },
+          {
+            chapter: 3,
+            title: "Identifying the Leaders Among the Human Traits",
+            content: "",
+          },
+          {
+            chapter: 4,
+            title:
+              "Crossing the Web2 & Web3 Networks to Welcome More Powerful People",
+            content: "",
+          },
+          {
+            chapter: 5,
+            title: "Organize People and Start Producing and Building!",
+            content: "",
+          },
+          {
+            chapter: 6,
+            title: "Building a Stable and Reliable Economy System",
+            content: "",
+          },
+          {
+            chapter: 7,
+            title: "Living Together in a Perpetual Network",
+            content: "",
+          },
+        ]}
+      />
+    </Flex>
+    {/* Plan end */}
   </Box>
 );
 export default Main;

@@ -7,6 +7,7 @@ import WalletConnnectHandler from "@/components/WalletConnnectHandler";
 import Main from "@/pages/Main";
 import Verify from "@/pages/Verify";
 import Invite from "@/pages/Invite";
+import KnowledgeTest from "@/pages/KnowledgeTest";
 import DID from "@/pages/DID";
 
 const App = () => (
@@ -15,8 +16,9 @@ const App = () => (
     <Box marginTop="94px">
       <Switch>
         <Route exact path="/" component={Main} />
-        <Route path="/mission/1" component={Verify} />
-        <Route path="/mission/2" component={Invite} />
+        <Route path="/proof-of-humanity" component={Verify} />
+        <Route path="/community-contribution" component={Invite} />
+        <Route path="/web3-knowledge-test" component={KnowledgeTest} />
         <Route path="/did" component={DID} />
       </Switch>
     </Box>
