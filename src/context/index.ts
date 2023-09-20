@@ -1,8 +1,8 @@
 import { ComponentType } from "react";
-import { withTokenContext } from "./token";
+import { withAccountContext } from "./account";
 import { withWalletConnectionContext } from "./walletConnection";
 
 const withContext = (Component: ComponentType) =>
-  withTokenContext(withWalletConnectionContext(Component));
+  withAccountContext(withWalletConnectionContext(Component));
 
 export default withContext;

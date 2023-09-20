@@ -6,8 +6,15 @@ import {
   Text,
   UnorderedList,
 } from "@chakra-ui/react";
+import { useEffect } from "react";
 
 const Invite = () => {
+  useEffect(() => {
+    setTimeout(() => {
+      // @ts-expect-error
+      window?.scrollTo({ top: 0, behavior: "instant" });
+    }, 10);
+  }, []);
   return (
     <Flex
       minH="calc(100vh - 94px)"

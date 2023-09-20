@@ -1,25 +1,23 @@
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Flex, Image, Text } from "@chakra-ui/react";
 import logo from "@/assets/images/logo.png";
 
 const Footer = () => (
-  <Box
+  <Flex
     bg="black"
     fontWeight="bold"
+    justify="space-between"
     px={{ base: 5, lg: 100 }}
-    py="60px"
+    pt="100px"
+    pb="150px"
     color="white"
+    direction={{ base: "column", md: "row" }}
   >
-    <Flex align="center" mb={4}>
-      <Image src={logo} width="30px" mr={2} />
-      <Text fontSize="1.25rem">0xer NFT</Text>
-    </Flex>
-    <Text maxW={{ base: "100%", lg: "40%" }} lineHeight={2}>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec et felis
-      eget turpis commodo aliquet sit amet vel odio. Vivamus accumsan lacinia
-      arcu, scelerisque laoreet nisl fringilla posuere. Nulla nec dolor vehicula
-      nisl pulvinar luctus non non mi. Morbi ac molestie leo, non porta eros.
-      Curabitur dapibus eleifend magna eget commodo.
+    <Text fontFamily="Aclonica" fontSize="1.25rem">
+      <Image src={logo} />
     </Text>
-  </Box>
+    <Text maxW={{ base: "100%", lg: "40%" }} lineHeight={2}>
+      © 2024 0xer.org
+    </Text>
+  </Flex>
 );
 export default Footer;
