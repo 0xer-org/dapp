@@ -30,6 +30,7 @@ import StageCard from "@/components/StageCard";
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import { sendSMSMessage, verifyRecaptcha, verifySMSMessage } from "@/api";
 import Countdown from "@/components/Countdown";
+import { useLiff } from "react-liff";
 
 enum VerificationStatus {
   IDLE,
@@ -49,23 +50,42 @@ const Verify = () => {
   );
   const { executeRecaptcha } = useGoogleReCaptcha();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isReady, liff } = useLiff();
 
   const sendMessage = useCallback(() => {
     if (account)
       sendSMSMessage({ account, phone }).then(() => setResendable(false));
   }, [account, phone]);
 
+  const lineCallback = useCallback(async () => {
+    if (!(isReady && liff.isInClient())) return;
+    const queryParams = new URLSearchParams(window.location.search);
+
+    const callbackType = queryParams.get("callbackType");
+
+    if (callbackType === "message") {
+      const message = queryParams.get("message");
+      await liff.sendMessages([
+        {
+          type: "text",
+          text: message,
+        },
+      ]);
+    }
+  }, [isReady, liff]);
+
   const verifyMessage = useCallback(() => {
     if (account) {
       verifySMSMessage({ account, code })
         .then(async () => {
+          await lineCallback();
           setVerificationStatus(VerificationStatus.SUCCESS);
         })
         .catch(() => {
           setVerificationStatus(VerificationStatus.ERROR);
         });
     }
-  }, [account, code]);
+  }, [account, code, lineCallback]);
 
   const finishVerificationProcess = useCallback(
     (success: boolean) => () => {
@@ -86,9 +106,10 @@ const Verify = () => {
       if (result.success) {
         // to next level
         setVerificationStatus(VerificationStatus.SUCCESS);
+        await lineCallback();
       }
     },
-    [account, executeRecaptcha]
+    [account, executeRecaptcha, lineCallback]
   );
 
   // auto scroll to top when entering this page
