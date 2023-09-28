@@ -69,71 +69,83 @@ const withAccountContext = (Component: ComponentType) => (props: any) => {
     }
   }, [account]);
 
-  const connect = useCallback(async (privateKey?: string) => {
-    providerRef.current = (window as any).ethereum;
-    // get wallet provider from privatekey
-    if (privateKey) {
-      providerRef.current = new HDWalletProvider({
-        privateKeys: [privateKey],
-        providerOrUrl: RPC,
-      });
-    }
-    const provider = providerRef.current as any;
-
-    if (!provider) return;
-    try {
-      // backward compatibility for hdwallet
-      const web3 = new Web3(provider);
-      const accounts = await web3.eth.getAccounts();
-
-      contractRef.current = new Contract(ABI, CONTRACT_ADDRESS, {
-        from: accounts[0],
-      });
-      contractRef.current.setProvider(providerRef.current);
-
-      setAccount(accounts[0]);
-
-      let chainIdBN = await web3.eth.getChainId();
-      let currentChaindId = +chainIdBN.toString(10);
-      if (currentChaindId && currentChaindId !== CHAIN_ID) {
-        try {
-          await provider.request({
-            method: "wallet_switchEthereumChain",
-            params: [{ chainId: "0x" + CHAIN_ID.toString(16) }],
-          });
-        } catch (switchError: any) {
-          // This error code indicates that the chain has not been added to MetaMask.
-          if (switchError.code === 4902) {
-            try {
-              await provider.request({
-                method: "wallet_addEthereumChain",
-                params: [
-                  {
-                    chainId: CHAIN_ID,
-                    chainName: "Arbitrum",
-                    rpcUrls: ["https://arb1.arbitrum.io/rpc"],
-                  },
-                ],
-              });
-              await provider.request({
-                method: "wallet_switchEthereumChain",
-                params: [{ chainId: "0x" + CHAIN_ID.toString(16) }],
-              });
-            } catch (addError) {
-              // handle "add" error
-            }
-          }
-          // handle other "switch" errors
-        }
-        chainIdBN = await web3.eth.getChainId();
-        currentChaindId = +chainIdBN.toString(10);
+  const connect = useCallback(
+    async (privateKey?: string) => {
+      providerRef.current = (window as any).ethereum;
+      // get wallet provider from privatekey
+      if (privateKey) {
+        providerRef.current = new HDWalletProvider({
+          privateKeys: [privateKey],
+          providerOrUrl: RPC,
+        });
       }
+      const provider = providerRef.current as any;
 
-      setChainId(+currentChaindId.toString(10));
-    } catch (e) {
-      console.error(e);
-    }
-  }, []);
+      if (!provider) return;
+      try {
+        // backward compatibility for hdwallet
+        const web3 = new Web3(provider);
+        const accounts = await web3.eth.getAccounts();
+
+        if (accounts.length === 0) {
+          toast({
+            title:
+              "Failed to get accounts info from wallet. Make sure you've unlocked your wallet",
+            duration: 3000,
+            status: "error",
+          });
+        }
+
+        contractRef.current = new Contract(ABI, CONTRACT_ADDRESS, {
+          from: accounts[0],
+        });
+        contractRef.current.setProvider(providerRef.current);
+
+        setAccount(accounts[0]);
+
+        let chainIdBN = await web3.eth.getChainId();
+        let currentChaindId = +chainIdBN.toString(10);
+        if (currentChaindId && currentChaindId !== CHAIN_ID) {
+          try {
+            await provider.request({
+              method: "wallet_switchEthereumChain",
+              params: [{ chainId: "0x" + CHAIN_ID.toString(16) }],
+            });
+          } catch (switchError: any) {
+            // This error code indicates that the chain has not been added to MetaMask.
+            if (switchError.code === 4902) {
+              try {
+                await provider.request({
+                  method: "wallet_addEthereumChain",
+                  params: [
+                    {
+                      chainId: CHAIN_ID,
+                      chainName: "Arbitrum",
+                      rpcUrls: ["https://arb1.arbitrum.io/rpc"],
+                    },
+                  ],
+                });
+                await provider.request({
+                  method: "wallet_switchEthereumChain",
+                  params: [{ chainId: "0x" + CHAIN_ID.toString(16) }],
+                });
+              } catch (addError) {
+                // handle "add" error
+              }
+            }
+            // handle other "switch" errors
+          }
+          chainIdBN = await web3.eth.getChainId();
+          currentChaindId = +chainIdBN.toString(10);
+        }
+
+        setChainId(+currentChaindId.toString(10));
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [toast]
+  );
 
   const sign = useCallback(
     async (message: string) => {
@@ -180,7 +192,7 @@ const withAccountContext = (Component: ComponentType) => (props: any) => {
 
   // auto wallet connection
   useEffect(() => {
-    connect();
+    if (localStorage.getItem("auth") != null) connect();
   }, [connect]);
 
   // check chain id
