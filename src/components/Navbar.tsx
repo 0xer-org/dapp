@@ -1,7 +1,6 @@
 import { withRouter } from "react-router";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import {
-  Avatar,
   Box,
   Collapse,
   Drawer,
@@ -27,10 +26,11 @@ import {
   HamburgerIcon,
 } from "@chakra-ui/icons";
 import AccountContext from "@/context/account";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import logo from "@/assets/images/logo.png";
 import openseaLogo from "@/assets/images/opensea.png";
 import twitterLogo from "@/assets/images/x.png";
+import { useLiff } from "react-liff";
 
 // @todo: add social links
 
@@ -123,8 +123,17 @@ const Navbar = () => {
   const [isDesktop] = useMediaQuery("(min-width: 996px)");
   const Navigation = isDesktop ? DesktopNavigation : MobileNavigation;
   const { account } = useContext(AccountContext);
+  const [lineMode, setLineMode] = useState(false);
+  const { isReady, liff } = useLiff();
 
-  return (
+  // check if is from line
+  useEffect(() => {
+    if (isReady && liff.isInClient()) {
+      setLineMode(true);
+    }
+  }, [isReady, liff]);
+
+  return lineMode ? null : (
     <Flex
       height="94px"
       width="100vw"
