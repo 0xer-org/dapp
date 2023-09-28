@@ -2,6 +2,7 @@ import { extendTheme } from "@chakra-ui/react";
 import { tabsTheme } from "./tabs";
 import { modalTheme } from "./modal";
 import { inputTheme } from "./input";
+import { tableTheme } from "./table";
 
 const theme = extendTheme({
   components: {
@@ -35,6 +36,7 @@ const theme = extendTheme({
     Tabs: tabsTheme,
     Modal: modalTheme,
     Input: inputTheme,
+    Table: tableTheme,
   },
   colors: {
     text: "#f5f5f5",
