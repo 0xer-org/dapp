@@ -1,7 +1,9 @@
 import { withRouter } from "react-router";
-import { Link as RouterLink, RouteComponentProps } from "react-router-dom";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 import {
+  Avatar,
   Box,
+  Collapse,
   Drawer,
   DrawerBody,
   DrawerContent,
@@ -9,29 +11,48 @@ import {
   Flex,
   IconButton,
   Image,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Text,
+  VStack,
   useDisclosure,
   useMediaQuery,
 } from "@chakra-ui/react";
 import ProfileLink from "@/components/ProfileLink";
-import { HamburgerIcon } from "@chakra-ui/icons";
+import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  HamburgerIcon,
+} from "@chakra-ui/icons";
 import AccountContext from "@/context/account";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import logo from "@/assets/images/logo.png";
 import openseaLogo from "@/assets/images/opensea.png";
 import twitterLogo from "@/assets/images/x.png";
 
 // @todo: add social links
 
-const DesktopNavigation = ({
-  history,
-}: {
-  history: RouteComponentProps["history"];
-}) => (
-  <Flex align="center" gap={6} fontSize="1.25rem" mr={10}>
-    <RouterLink to="/">Tasks</RouterLink>
-    <RouterLink to="/">Paper</RouterLink>
-    <RouterLink to="/">FAQ</RouterLink>
-    <RouterLink to="/">Twitter</RouterLink>
+const DesktopNavigation = () => (
+  <Flex align="center" gap={6} fontSize="1.25rem" fontWeight="normal" mr={10}>
+    <Menu>
+      <MenuButton>Tasks</MenuButton>
+      <MenuList bg="#393A36" borderColor="accent">
+        <MenuItem bg="#393A36">
+          <RouterLink to="/tasks/1">Task #001</RouterLink>
+        </MenuItem>
+        <MenuItem bg="#393A36">
+          <RouterLink to="/tasks/2">Task #002</RouterLink>
+        </MenuItem>
+        <MenuItem bg="#393A36">
+          <RouterLink to="/tasks/3">Task #003</RouterLink>
+        </MenuItem>
+      </MenuList>
+    </Menu>
+    <RouterLink to="/">Whitepaper</RouterLink>
+    <RouterLink to="/">Airdrop</RouterLink>
+    <RouterLink to="/dna">MyDNA</RouterLink>
     <RouterLink to="/">
       <Image src={twitterLogo} width="2.5rem" />
     </RouterLink>
@@ -42,12 +63,20 @@ const DesktopNavigation = ({
 );
 
 const MobileNavigation = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onToggle, onClose } = useDisclosure();
+  const { isOpen: tasksOpen, onToggle: onTasksToggle } = useDisclosure();
+
+  const location = useLocation();
+
+  useEffect(() => {
+    onClose();
+  }, [location, onClose]);
+
   return (
     <>
       <IconButton
         aria-label="hamburger"
-        onClick={onOpen}
+        onClick={onToggle}
         bg="black"
         color="white"
         _hover={{
@@ -59,12 +88,29 @@ const MobileNavigation = () => {
       </IconButton>
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
-        <DrawerContent bg="black" marginTop="96px" width="100px">
+        <DrawerContent bg="black" marginTop="94px">
           <DrawerBody color="white">
             <Flex direction="column" p={5} gap={3}>
-              <RouterLink to="/">Paper</RouterLink>
-              <RouterLink to="/">FAQ</RouterLink>
-              <RouterLink to="/">Twitter</RouterLink>
+              <Flex align="center" gap={3}>
+                <Text onClick={onTasksToggle}>Tasks</Text>
+                {tasksOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+              </Flex>
+              <Collapse in={tasksOpen}>
+                <VStack align="flex-start" pl={4}>
+                  <RouterLink to="/tasks/1">Task #001</RouterLink>
+                  <RouterLink to="/tasks/2">Task #002</RouterLink>
+                  <RouterLink to="/tasks/3">Task #003</RouterLink>
+                </VStack>
+              </Collapse>
+              <RouterLink to="/">Whitepaper</RouterLink>
+              <RouterLink to="/">Airdrop</RouterLink>
+              <RouterLink to="/dna">MyDNA</RouterLink>
+              <RouterLink to="/">
+                <Image src={twitterLogo} width="2.5rem" />
+              </RouterLink>
+              <RouterLink to="/">
+                <Image src={openseaLogo} width="2.5rem" />
+              </RouterLink>
             </Flex>
           </DrawerBody>
         </DrawerContent>
@@ -73,7 +119,7 @@ const MobileNavigation = () => {
   );
 };
 
-const Navbar = ({ history }: { history: RouteComponentProps["history"] }) => {
+const Navbar = () => {
   const [isDesktop] = useMediaQuery("(min-width: 996px)");
   const Navigation = isDesktop ? DesktopNavigation : MobileNavigation;
   const { account } = useContext(AccountContext);
@@ -100,7 +146,7 @@ const Navbar = ({ history }: { history: RouteComponentProps["history"] }) => {
         direction={!!account || isDesktop ? "row" : "row-reverse"}
         align="center"
       >
-        <Navigation history={history} />
+        <Navigation />
         <Box>
           <ProfileLink />
         </Box>

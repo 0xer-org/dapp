@@ -8,7 +8,7 @@ import Main from "@/pages/Main";
 import Verify from "@/pages/Verify";
 import Invite from "@/pages/Invite";
 import KnowledgeTest from "@/pages/KnowledgeTest";
-import DID from "@/pages/DID";
+import DNA from "@/pages/DNA";
 import HumanityIndex from "./pages/HumanityIndex";
 
 const App = () => (
@@ -21,7 +21,7 @@ const App = () => (
         <Route path="/proof-of-humanity" component={Verify} />
         <Route path="/community-contribution" component={Invite} />
         <Route path="/web3-knowledge-test" component={KnowledgeTest} />
-        <Route path="/did" component={DID} />
+        <Route path="/dna" component={DNA} />
       </Switch>
     </Box>
     <Footer />

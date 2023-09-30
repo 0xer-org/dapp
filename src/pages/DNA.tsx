@@ -18,7 +18,7 @@ import lockOpenLogo from "@/assets/images/lock-open.png";
 import communityLogo from "@/assets/images/community.png";
 import lightBulbLogo from "@/assets/images/Lightbulb.png";
 
-const DID = ({ history }: { history: RouteComponentProps["history"] }) => {
+const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
   const { account, values } = useContext(AccountContext);
 
   const authStatus = values ? parseInt(values.slice(0, 2), 10) : 0;
@@ -159,4 +159,4 @@ const DID = ({ history }: { history: RouteComponentProps["history"] }) => {
   );
 };
 
-export default DID;
+export default DNA;
