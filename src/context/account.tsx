@@ -100,12 +100,14 @@ const withAccountContext = (Component: ComponentType) => (props: any) => {
           });
         }
 
+        const fetchedAccount = web3.utils.toChecksumAddress(accounts[0]);
+
         contractRef.current = new Contract(ABI, CONTRACT_ADDRESS, {
-          from: accounts[0],
+          from: fetchedAccount,
         });
         contractRef.current.setProvider(providerRef.current);
 
-        setAccount(accounts[0]);
+        setAccount(fetchedAccount);
 
         let chainIdBN = await web3.eth.getChainId();
         let currentChaindId = +chainIdBN.toString(10);
