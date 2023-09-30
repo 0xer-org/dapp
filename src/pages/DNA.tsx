@@ -144,7 +144,7 @@ const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
               DNA NFT and officially become a member of the 0xer community.
             </Text>
             <Button
-              onClick={() => history.push("/proof-of-humanity")}
+              onClick={() => history.push("/tasks/1")}
               color="black"
               px={100}
               variant="outline"

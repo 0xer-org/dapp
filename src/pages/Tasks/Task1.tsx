@@ -27,10 +27,11 @@ import recaptchaLogo from "@/assets/images/recaptcha.png";
 import smsLogo from "@/assets/images/sms.png";
 import faceLogo from "@/assets/images/face.png";
 import StageCard from "@/components/StageCard";
-import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
+import { CheckIcon, CloseIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import { sendSMSMessage, verifyRecaptcha, verifySMSMessage } from "@/api";
 import Countdown from "@/components/Countdown";
 import { useLiff } from "react-liff";
+import { Link } from "react-router-dom";
 
 enum VerificationStatus {
   IDLE,
@@ -308,12 +309,19 @@ const Verify = () => {
                     retain your personal information.
                   </Text>
                 </Box>
-                <Divider my={3} />
+                <Divider my={6} />
                 <Box>
-                  <Text fontSize="xl" my={4}>
+                  <Text fontSize="xl" fontWeight="bold" my={4}>
                     Data Contribute to
                   </Text>
-                  <Text fontWeight={300}>Humanity Index {"{0x(0000)}"}</Text>
+                  <Flex align="center">
+                    <Text fontWeight={300} pr={2}>
+                      Humanity Index {"{0x(0000)}"}
+                    </Text>
+                    <Link to="/task-introduction/1">
+                      <ExternalLinkIcon />
+                    </Link>
+                  </Flex>
                 </Box>
               </Box>
               <Box flex={3} maxW={500}>

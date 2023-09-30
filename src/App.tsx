@@ -5,11 +5,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WalletConnnectHandler from "@/components/WalletConnnectHandler";
 import Main from "@/pages/Main";
-import Verify from "@/pages/Verify";
-import Invite from "@/pages/Invite";
-import KnowledgeTest from "@/pages/KnowledgeTest";
 import DNA from "@/pages/DNA";
-import HumanityIndex from "./pages/HumanityIndex";
+import TaskIntroduction from "@/pages/TaskIntroduction";
+import Tasks from "@/pages/Tasks";
 
 const App = () => (
   <Router>
@@ -17,10 +15,8 @@ const App = () => (
     <Box marginTop="94px">
       <Switch>
         <Route exact path="/" component={Main} />
-        <Route path="/humanity-index" component={HumanityIndex} />
-        <Route path="/proof-of-humanity" component={Verify} />
-        <Route path="/community-contribution" component={Invite} />
-        <Route path="/web3-knowledge-test" component={KnowledgeTest} />
+        <Route path="/task-introduction/:id" component={TaskIntroduction} />
+        <Route path="/tasks/:id" component={Tasks} />
         <Route path="/dna" component={DNA} />
       </Switch>
     </Box>

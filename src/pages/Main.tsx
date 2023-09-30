@@ -44,7 +44,7 @@ const Main = ({ history }: { history: RouteComponentProps["history"] }) => {
             variant="outlineDark"
             width={300}
             fontSize="sm"
-            onClick={() => history.push("/proof-of-humanity")}
+            onClick={() => history.push("/tasks/1")}
           >
             Mint Your NFT
           </Button>
@@ -88,7 +88,7 @@ const Main = ({ history }: { history: RouteComponentProps["history"] }) => {
             </Text>
             <Flex justify={{ base: "center", md: "flex-start" }}>
               <Button
-                onClick={() => history.push("/proof-of-humanity")}
+                onClick={() => history.push("/tasks/1")}
                 mt={5}
                 variant="outline"
               >
@@ -260,7 +260,7 @@ const Main = ({ history }: { history: RouteComponentProps["history"] }) => {
               levels, it represents your credibility as a genuine human being.
             </Text>
             <Button
-              onClick={() => history.push("/proof-of-humanity")}
+              onClick={() => history.push("/tasks/1")}
               width="100%"
               color="black"
               border="1px solid black"
@@ -291,7 +291,7 @@ const Main = ({ history }: { history: RouteComponentProps["history"] }) => {
               higher your contribution value will be.
             </Text>
             <Button
-              onClick={() => history.push("/community-contribution")}
+              onClick={() => history.push("/tasks/2")}
               width="100%"
               color="black"
               border="1px solid black"
@@ -321,7 +321,7 @@ const Main = ({ history }: { history: RouteComponentProps["history"] }) => {
               personally experienced it can pass this trial.
             </Text>
             <Button
-              onClick={() => history.push("/web3-knowledge-test")}
+              onClick={() => history.push("/tasks/3")}
               width="100%"
               color="black"
               border="1px solid black"
