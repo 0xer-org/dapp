@@ -83,11 +83,15 @@ const withAccountContext = (Component: ComponentType) => (props: any) => {
 
       if (!provider) return;
       try {
-        // backward compatibility for hdwallet
         const web3 = new Web3(provider);
-        const accounts = await web3.eth.getAccounts();
+        let accounts;
+        try {
+          accounts = await web3.eth.requestAccounts();
+        } catch (e) {
+          accounts = await web3.eth.getAccounts();
+        }
 
-        if (accounts.length === 0) {
+        if (accounts?.length === 0) {
           toast({
             title:
               "Failed to get accounts info from wallet. Make sure you've unlocked your wallet",
