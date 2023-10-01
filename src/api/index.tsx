@@ -39,8 +39,10 @@ export const verifyRecaptcha = ({
 export const sendSMSMessage = ({
   account,
   phone,
+  countryCode,
 }: {
   account: string;
+  countryCode: string;
   phone: string;
 }) =>
   fetch(`${SERVER_URL}/0xer/${account}/sms`, {
@@ -49,7 +51,7 @@ export const sendSMSMessage = ({
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("auth")}`,
     },
-    body: JSON.stringify({ phone }),
+    body: JSON.stringify({ phone: countryCode + phone }),
   }).then((response) => response.json());
 
 export const verifySMSMessage = ({

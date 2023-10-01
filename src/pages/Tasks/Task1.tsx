@@ -10,12 +10,17 @@ import {
   Divider,
   Flex,
   Input,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Select,
   Text,
   VStack,
   useDisclosure,
@@ -32,6 +37,7 @@ import { sendSMSMessage, verifyRecaptcha, verifySMSMessage } from "@/api";
 import Countdown from "@/components/Countdown";
 import { useLiff } from "react-liff";
 import { Link } from "react-router-dom";
+import CountryCodeMenu from "@/components/CountryCodeMenu";
 
 enum VerificationStatus {
   IDLE,
@@ -44,6 +50,7 @@ const Verify = () => {
   const { account, values } = useContext(AccountContext);
   const [level, setLevel] = useState<number>(0);
   const [phone, setPhone] = useState("");
+  const [countryCode, setCountryCode] = useState("+886");
   const [code, setCode] = useState("");
   const [resendable, setResendable] = useState(true);
   const [lineMode, setLineMode] = useState(false);
@@ -55,9 +62,12 @@ const Verify = () => {
   const { isReady, liff } = useLiff();
 
   const sendMessage = useCallback(() => {
-    if (account)
-      sendSMSMessage({ account, phone }).then(() => setResendable(false));
-  }, [account, phone]);
+    if (account) {
+      sendSMSMessage({ account, countryCode, phone }).then(() =>
+        setResendable(false)
+      );
+    }
+  }, [account, countryCode, phone]);
 
   const lineCallback = useCallback(async () => {
     if (!(isReady && liff.isInClient())) return;
@@ -161,8 +171,8 @@ const Verify = () => {
           )}
           <ModalBody
             p={5}
-            borderTop="1px solid #52534F"
-            borderBottom="1px solid #52534F"
+            borderTop={lineMode ? "none" : "1px solid #52534F"}
+            borderBottom={lineMode ? "none" : "1px solid #52534F"}
           >
             {verificationStatus === VerificationStatus.SUCCESS && (
               <Center flexDirection="column">
@@ -232,18 +242,32 @@ const Verify = () => {
                     code.
                   </Text>
                   <Box my={5}>
-                    <Flex gap={3} my={4} width="80%">
-                      <Input
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        width="70%"
-                        placeholder="Type your phone number"
-                      />
+                    <Flex gap={3} my={4} wrap="wrap">
+                      <Flex gap={3} width={{ base: "100%", md: "70%" }}>
+                        <CountryCodeMenu
+                          value={countryCode}
+                          onSelect={setCountryCode}
+                          list={[
+                            { country: "United State", code: "+1" },
+                            { country: "Taiwan", code: "+886" },
+                            { country: "China", code: "+86" },
+                            { country: "Hong Kong", code: "+852" },
+                          ]}
+                        />
+                        <Input
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          placeholder="Type your phone number"
+                          flex={3}
+                          borderWidth={2}
+                        />
+                      </Flex>
                       <Button
-                        borderRadius={4}
                         onClick={sendMessage}
                         flex={1}
+                        maxW={120}
                         isDisabled={!resendable}
+                        borderRadius={4}
                         _disabled={{
                           opacity: 0.6,
                         }}
@@ -261,23 +285,34 @@ const Verify = () => {
                         )}
                       </Button>
                     </Flex>
-                    <Flex
-                      opacity={resendable ? 0 : 1}
-                      gap={3}
-                      my={4}
-                      width="80%"
-                    >
+                    <Flex opacity={resendable ? 0 : 1} gap={3} wrap="wrap">
                       <Input
                         value={code}
                         onChange={(e) => setCode(e.target.value)}
-                        width="70%"
+                        width={{ base: "100%", md: "70%" }}
                         placeholder="Code"
                       />
-                      <Button borderRadius={4} flex={1} onClick={verifyMessage}>
+                      <Button
+                        onClick={verifyMessage}
+                        borderRadius={4}
+                        flex={1}
+                        maxW={120}
+                      >
                         OK
                       </Button>
                     </Flex>
                   </Box>
+                </Box>
+              )}
+              {level === 3 && (
+                <Box
+                  display={
+                    verificationStatus === VerificationStatus.IDLE
+                      ? "block"
+                      : "none"
+                  }
+                >
+                  Coming Soon
                 </Box>
               )}
             </>
