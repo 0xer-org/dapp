@@ -38,6 +38,7 @@ import Countdown from "@/components/Countdown";
 import { useLiff } from "react-liff";
 import { Link } from "react-router-dom";
 import CountryCodeMenu from "@/components/CountryCodeMenu";
+import useScrollToTop from "@/libs/useScrollToTop";
 
 enum VerificationStatus {
   IDLE,
@@ -47,6 +48,7 @@ enum VerificationStatus {
 }
 
 const Verify = () => {
+  useScrollToTop();
   const { account, values } = useContext(AccountContext);
   const [level, setLevel] = useState<number>(0);
   const [phone, setPhone] = useState("");
@@ -130,14 +132,6 @@ const Verify = () => {
       setLineMode(true);
     }
   }, [isReady, liff]);
-
-  // auto scroll to top when entering this page
-  useEffect(() => {
-    setTimeout(() => {
-      // @ts-expect-error
-      window?.scrollTo({ top: 0, behavior: "instant" });
-    }, 10);
-  }, []);
 
   // fetch verification status
   useEffect(() => {

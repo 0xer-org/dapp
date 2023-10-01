@@ -5,6 +5,7 @@ import Leaderboard from "@/components/Leaderboard";
 import RankCard from "@/components/RankCard";
 import { Link } from "react-router-dom";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
+import useScrollToTop from "@/libs/useScrollToTop";
 
 enum Tabs {
   INTRO,
@@ -50,14 +51,9 @@ const Template = ({
   userData = {},
   leaderboard = {},
 }: TaskIntroductionTemplateProps) => {
+  useScrollToTop();
   const { account } = useContext(AccountContext);
   const [tab, setTab] = useState(Tabs.INTRO);
-  useEffect(() => {
-    setTimeout(() => {
-      // @ts-expect-error
-      window?.scrollTo({ top: 0, behavior: "instant" });
-    }, 10);
-  }, []);
   return (
     <Box minH="calc(100vh - 94px)" bg="black" p={{ base: 3, md: 12 }}>
       <Container maxW={1440}>

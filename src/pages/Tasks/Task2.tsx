@@ -1,16 +1,10 @@
-import { useEffect } from "react";
 import { Box, Container, Divider, Flex, Text, VStack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
+import useScrollToTop from "@/libs/useScrollToTop";
 
 const Referral = () => {
-  // auto scroll to top when entering this page
-  useEffect(() => {
-    setTimeout(() => {
-      // @ts-expect-error
-      window?.scrollTo({ top: 0, behavior: "instant" });
-    }, 10);
-  }, []);
+  useScrollToTop();
 
   return (
     <Box minH="calc(100vh - 94px)" bg="black" p={{ base: 3, md: 12 }}>
