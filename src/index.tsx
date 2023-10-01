@@ -5,9 +5,6 @@ import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider } from "@chakra-ui/react";
 import theme from "./theme";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
-import { LiffProvider } from "react-liff";
-
-const liffId = process.env.REACT_APP_LINE_LIFF_ID || "";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -16,10 +13,7 @@ root.render(
   <React.StrictMode>
     <GoogleReCaptchaProvider reCaptchaKey="6LdWFlYnAAAAAHE2RE4GHQcI4qQ3I74sLGtAYAqn">
       <ChakraProvider theme={theme}>
-        {/* @ts-expect-error liff provider type error */}
-        <LiffProvider liffId={liffId}>
-          <App />
-        </LiffProvider>
+        <App />
       </ChakraProvider>
     </GoogleReCaptchaProvider>
   </React.StrictMode>

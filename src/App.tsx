@@ -8,6 +8,7 @@ import Main from "@/pages/Main";
 import DNA from "@/pages/DNA";
 import TaskIntroduction from "@/pages/TaskIntroduction";
 import Tasks from "@/pages/Tasks";
+import withLiff from "./libs/withLiff";
 
 const App = () => (
   <Router>
@@ -25,4 +26,4 @@ const App = () => (
   </Router>
 );
 
-export default withContext(App);
+export default withLiff(withContext(App));
