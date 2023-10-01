@@ -1,18 +1,10 @@
 import { Flex, Image, Text } from "@chakra-ui/react";
 import logo from "@/assets/images/logo.png";
-import { useEffect, useState } from "react";
-import { useLiff } from "react-liff";
+import isInLineBrowser from "@/libs/isInLineBrowser";
 
 const Footer = () => {
-  const [lineMode, setLineMode] = useState(false);
-  const { isReady, liff } = useLiff();
+  const lineMode = isInLineBrowser();
 
-  // check if is from line
-  useEffect(() => {
-    if (isReady && liff.isInClient()) {
-      setLineMode(true);
-    }
-  }, [isReady, liff]);
   return lineMode ? null : (
     <Flex
       bg="black"

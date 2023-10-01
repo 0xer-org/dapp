@@ -6,21 +6,17 @@ import {
   Box,
   Button,
   Center,
+  CircularProgress,
   Container,
   Divider,
   Flex,
   Input,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Select,
   Text,
   VStack,
   useDisclosure,
@@ -39,6 +35,7 @@ import { useLiff } from "react-liff";
 import { Link } from "react-router-dom";
 import CountryCodeMenu from "@/components/CountryCodeMenu";
 import useScrollToTop from "@/libs/useScrollToTop";
+import isInLineBrowser from "@/libs/isInLineBrowser";
 
 enum VerificationStatus {
   IDLE,
@@ -54,8 +51,8 @@ const Verify = () => {
   const [phone, setPhone] = useState("");
   const [countryCode, setCountryCode] = useState("+886");
   const [code, setCode] = useState("");
+  const lineMode = isInLineBrowser();
   const [resendable, setResendable] = useState(true);
-  const [lineMode, setLineMode] = useState(false);
   const [verificationStatus, setVerificationStatus] = useState(
     VerificationStatus.IDLE
   );
@@ -110,6 +107,12 @@ const Verify = () => {
     [onClose]
   );
 
+  const onVerifySuccessClick = useCallback(
+    () =>
+      lineMode ? () => liff.closeWindow() : finishVerificationProcess(true),
+    [finishVerificationProcess, liff, lineMode]
+  );
+
   const recaptchaVerify = useCallback(
     async (v2Response: string) => {
       if (!account || !executeRecaptcha) return;
@@ -125,13 +128,6 @@ const Verify = () => {
     },
     [account, executeRecaptcha, lineCallback]
   );
-
-  // check if is from line
-  useEffect(() => {
-    if (isReady && liff.isInClient()) {
-      setLineMode(true);
-    }
-  }, [isReady, liff]);
 
   // fetch verification status
   useEffect(() => {
@@ -168,148 +164,129 @@ const Verify = () => {
             borderTop={lineMode ? "none" : "1px solid #52534F"}
             borderBottom={lineMode ? "none" : "1px solid #52534F"}
           >
-            {verificationStatus === VerificationStatus.SUCCESS && (
-              <Center flexDirection="column">
-                <CheckIcon fontSize="120px" color="#67AE3C" m={20} />
-                <Button
-                  variant="outlineDark"
-                  onClick={
-                    lineMode
-                      ? () => liff.closeWindow()
-                      : finishVerificationProcess(true)
-                  }
-                >
-                  OK(
-                  <Countdown
-                    from={3}
-                    onFinish={
-                      lineMode
-                        ? () => liff.closeWindow()
-                        : finishVerificationProcess(true)
-                    }
-                  />
-                  )
-                </Button>
-              </Center>
-            )}
-            {verificationStatus === VerificationStatus.ERROR && (
-              <Center flexDirection="column">
-                <CloseIcon fontSize="120px" color="#B00C0C" m={20} />
-                <Button
-                  variant="outlineDark"
-                  onClick={finishVerificationProcess(false)}
-                >
-                  Retry
-                </Button>
-              </Center>
-            )}
-            <>
-              {level === 1 && (
-                <Box
-                  display={
-                    verificationStatus === VerificationStatus.IDLE
-                      ? "block"
-                      : "none"
-                  }
-                >
-                  <Text my={3}>按下 Google 人類驗證按鈕，證明你不是機器人</Text>
-                  <Text>Click Google ReCAPTCHA V2</Text>
-                  <Box my={3}>
-                    <RecaptchaV2
-                      sitekey="6LcvoXUnAAAAAJKJNH9lfguHB0ljVxQgLOxCChhR"
-                      onChange={recaptchaVerify}
-                    />
-                  </Box>
-                </Box>
-              )}
-              {level === 2 && (
-                <Box
-                  display={
-                    verificationStatus === VerificationStatus.IDLE
-                      ? "block"
-                      : "none"
-                  }
-                >
-                  <Text my={3}>進行手機簡訊驗證</Text>
-                  <Text>
-                    Enter your phone number, receive and enter the verification
-                    code.
-                  </Text>
-                  <Box my={5}>
-                    <Flex gap={3} my={4} wrap="wrap">
-                      <Flex gap={3} width={{ base: "100%", md: "70%" }}>
-                        <CountryCodeMenu
-                          value={countryCode}
-                          onSelect={setCountryCode}
-                          list={[
-                            { country: "United State", code: "+1" },
-                            { country: "Taiwan", code: "+886" },
-                            { country: "China", code: "+86" },
-                            { country: "Hong Kong", code: "+852" },
-                          ]}
-                        />
-                        <Input
-                          value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
-                          placeholder="Type your phone number"
-                          flex={3}
-                          borderWidth={2}
-                        />
-                      </Flex>
+            {(() => {
+              switch (true) {
+                case verificationStatus === VerificationStatus.SUCCESS:
+                  return (
+                    <Center flexDirection="column">
+                      <CheckIcon fontSize="120px" color="#67AE3C" m={20} />
                       <Button
-                        onClick={sendMessage}
-                        flex={1}
-                        maxW={120}
-                        isDisabled={!resendable}
-                        borderRadius={4}
-                        _disabled={{
-                          opacity: 0.6,
-                        }}
+                        variant="outlineDark"
+                        onClick={onVerifySuccessClick}
                       >
-                        Send{" "}
-                        {resendable || (
-                          <>
-                            (
-                            <Countdown
-                              from={60}
-                              onFinish={() => setResendable(true)}
+                        OK(
+                        <Countdown from={3} onFinish={onVerifySuccessClick} />)
+                      </Button>
+                    </Center>
+                  );
+                case verificationStatus === VerificationStatus.ERROR:
+                  return (
+                    <Center flexDirection="column">
+                      <CloseIcon fontSize="120px" color="#B00C0C" m={20} />
+                      <Button
+                        variant="outlineDark"
+                        onClick={finishVerificationProcess(false)}
+                      >
+                        Retry
+                      </Button>
+                    </Center>
+                  );
+                case level === 0:
+                  return (
+                    <Box p={20} textAlign="center">
+                      <CircularProgress isIndeterminate />
+                    </Box>
+                  );
+                case level === 1:
+                  return (
+                    <Box>
+                      <Text my={3}>
+                        按下 Google 人類驗證按鈕，證明你不是機器人
+                      </Text>
+                      <Text>Click Google ReCAPTCHA V2</Text>
+                      <Box my={3}>
+                        <RecaptchaV2
+                          sitekey="6LcvoXUnAAAAAJKJNH9lfguHB0ljVxQgLOxCChhR"
+                          onChange={recaptchaVerify}
+                        />
+                      </Box>
+                    </Box>
+                  );
+                case level === 2:
+                  return (
+                    <Box>
+                      <Text my={3}>進行手機簡訊驗證</Text>
+                      <Text>
+                        Enter your phone number, receive and enter the
+                        verification code.
+                      </Text>
+                      <Box my={5}>
+                        <Flex gap={3} my={4} wrap="wrap">
+                          <Flex gap={3} width={{ base: "100%", md: "70%" }}>
+                            <CountryCodeMenu
+                              value={countryCode}
+                              onSelect={setCountryCode}
+                              list={[
+                                { country: "United State", code: "+1" },
+                                { country: "Taiwan", code: "+886" },
+                                { country: "China", code: "+86" },
+                                { country: "Hong Kong", code: "+852" },
+                              ]}
                             />
-                            )
-                          </>
-                        )}
-                      </Button>
-                    </Flex>
-                    <Flex opacity={resendable ? 0 : 1} gap={3} wrap="wrap">
-                      <Input
-                        value={code}
-                        onChange={(e) => setCode(e.target.value)}
-                        width={{ base: "100%", md: "70%" }}
-                        placeholder="Code"
-                      />
-                      <Button
-                        onClick={verifyMessage}
-                        borderRadius={4}
-                        flex={1}
-                        maxW={120}
-                      >
-                        OK
-                      </Button>
-                    </Flex>
-                  </Box>
-                </Box>
-              )}
-              {level === 3 && (
-                <Box
-                  display={
-                    verificationStatus === VerificationStatus.IDLE
-                      ? "block"
-                      : "none"
-                  }
-                >
-                  Coming Soon
-                </Box>
-              )}
-            </>
+                            <Input
+                              value={phone}
+                              onChange={(e) => setPhone(e.target.value)}
+                              placeholder="Type your phone number"
+                              flex={3}
+                              borderWidth={2}
+                            />
+                          </Flex>
+                          <Button
+                            onClick={sendMessage}
+                            flex={1}
+                            maxW={120}
+                            isDisabled={!resendable}
+                            borderRadius={4}
+                            _disabled={{
+                              opacity: 0.6,
+                            }}
+                          >
+                            Send{" "}
+                            {resendable || (
+                              <>
+                                (
+                                <Countdown
+                                  from={60}
+                                  onFinish={() => setResendable(true)}
+                                />
+                                )
+                              </>
+                            )}
+                          </Button>
+                        </Flex>
+                        <Flex opacity={resendable ? 0 : 1} gap={3} wrap="wrap">
+                          <Input
+                            value={code}
+                            onChange={(e) => setCode(e.target.value)}
+                            width={{ base: "100%", md: "70%" }}
+                            placeholder="Code"
+                          />
+                          <Button
+                            onClick={verifyMessage}
+                            borderRadius={4}
+                            flex={1}
+                            maxW={120}
+                          >
+                            OK
+                          </Button>
+                        </Flex>
+                      </Box>
+                    </Box>
+                  );
+                case level === 3:
+                  return <Box>Coming Soon</Box>;
+              }
+            })()}
           </ModalBody>
         </ModalContent>
       </Modal>
