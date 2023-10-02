@@ -109,17 +109,7 @@ const Referral = () => {
                         time, you will establish a "connection" with them,
                         serving as part of your social graph in 0xer Space.
                       </Text>
-                      <Button
-                        width="100%"
-                        borderRadius={4}
-                        fontSize="sm"
-                        fontWeight="normal"
-                        onClick={copyUrl}
-                        whiteSpace="normal"
-                        display="inline"
-                        height="auto"
-                        py={4}
-                      >
+                      <Button onClick={copyUrl} variant="outlineDark">
                         {createInviteUrl(id)}
                         <CopyIcon
                           mx={{ base: "auto", md: 2 }}

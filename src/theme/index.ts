@@ -37,6 +37,13 @@ const theme = extendTheme({
     Modal: modalTheme,
     Input: inputTheme,
     Table: tableTheme,
+    Progress: {
+      baseStyle: {
+        filledTrack: {
+          bg: "white",
+        },
+      },
+    },
   },
   colors: {
     text: "#f5f5f5",
