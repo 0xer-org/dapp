@@ -150,7 +150,7 @@ const Verify = () => {
         size={{ base: "sm", md: "xl" }}
       >
         <ModalOverlay />
-        <ModalContent borderWidth={lineMode ? 0 : 1}>
+        <ModalContent borderWidth={lineMode ? 0 : 2}>
           {lineMode || (
             <ModalHeader>
               <Text fontSize="lg" top={3} position="absolute" width="90%">
@@ -161,8 +161,8 @@ const Verify = () => {
           )}
           <ModalBody
             p={5}
-            borderTop={lineMode ? "none" : "1px solid #52534F"}
-            borderBottom={lineMode ? "none" : "1px solid #52534F"}
+            borderTop={lineMode ? "none" : "2px solid #52534F"}
+            borderBottom={lineMode ? "none" : "2px solid #52534F"}
           >
             {(() => {
               switch (true) {
@@ -332,7 +332,9 @@ const Verify = () => {
               </Box>
               <Box flex={3} maxW={500}>
                 <Flex align="center" gap={3} mb={4}>
-                  <Text fontSize="xl">Identify Level</Text>
+                  <Text fontSize="xl" fontWeight={500}>
+                    Identify Level
+                  </Text>
                   <Flex gap={4}>
                     <LevelIcon level={1} completed={level > 1} />
                     <LevelIcon level={2} completed={level > 2} />

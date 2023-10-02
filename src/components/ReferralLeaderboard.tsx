@@ -12,14 +12,15 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
+import LevelIcon from "./LevelIcon";
 
 interface LeaderboardProps {
   totalParticipants?: number;
-  data?: Array<{ value: number; address: string }>;
+  data?: Array<{ joinedAt: number; address: string; level: number }>;
   updatedAt?: number;
 }
 
-const Leaderboard = ({
+const ReferralLeaderboard = ({
   totalParticipants,
   data,
   updatedAt,
@@ -50,16 +51,17 @@ const Leaderboard = ({
       <Table variant="unstyled" size="md">
         <Thead position="sticky" top={0} zIndex="docked">
           <Tr>
-            <Th pr={4}>Rank</Th>
-            <Th pr={4}>Value</Th>
-            <Th>Address</Th>
+            <Th pr={4}>#</Th>
+            <Th pr={4}>JoinedAt</Th>
+            <Th pr={4}>Address</Th>
+            <Th pr={4}>Human Level</Th>
           </Tr>
         </Thead>
         <Tbody>
-          {data?.map(({ address, value }, index) => (
+          {data?.map(({ address, joinedAt, level }, index) => (
             <Tr borderBottom="none" key={index}>
               <Td>{index + 1}</Td>
-              <Td>{value}</Td>
+              <Td>{joinedAt}</Td>
               <Td>
                 <Flex align="center" gap={2}>
                   <Avatar
@@ -67,6 +69,13 @@ const Leaderboard = ({
                     size={{ base: "xs", md: "sm" }}
                   />
                   {shortenAddress(address)}
+                </Flex>
+              </Td>
+              <Td>
+                <Flex gap={2}>
+                  <LevelIcon level={1} completed={level > 1} />
+                  <LevelIcon level={2} completed={level > 2} />
+                  <LevelIcon level={3} completed={level > 3} />
                 </Flex>
               </Td>
             </Tr>
@@ -80,4 +89,4 @@ const Leaderboard = ({
   </Box>
 );
 
-export default Leaderboard;
+export default ReferralLeaderboard;
