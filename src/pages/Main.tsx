@@ -36,7 +36,12 @@ const Main = ({ history }: { history: RouteComponentProps["history"] }) => {
             trustworthy, unique and true to thyself. This reborn identity shall
             be a key to unlock the gates of the multiverse.
           </Text>
-          <Text mt={{ base: 2, md: 10 }} fontSize="4xl">
+          <Text
+            mt={{ base: 2, md: 10 }}
+            fontSize="5xl"
+            fontFamily="Cursed Timer ULiL"
+            letterSpacing={1}
+          >
             {totalMint}
           </Text>
           <Button
