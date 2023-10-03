@@ -1,24 +1,42 @@
 import { ListItem, UnorderedList } from "@chakra-ui/react";
 import Template from "./Template";
 import algorithmPicture from "@/assets/images/algorithm.png";
+import { useContext, useEffect, useState } from "react";
+import { getReferrals } from "@/api";
+import AccountContext from "@/context/account";
 
 const Intro2 = () => {
-  // @todo: connect real data
-  const totalParticipants = 2521;
-  const userData = {
-    value: 38,
-    rank: 1223,
-    updatedAt: Date.now(),
-  };
-  const leaderboard = {
-    data: [
-      {
-        value: 255,
-        address: "0xC17D7c18162DD3c92E4Ffbd097C285c567ee927c",
-      },
-    ],
-    updatedAt: Date.now(),
-  };
+  const { account } = useContext(AccountContext);
+  const [leaderboard, setLeaderBoard] = useState<{
+    data: Array<{ value: number; address: string }>;
+    updatedAt?: number;
+  }>({ data: [] });
+  const [totalParticipants, setTotalParticipants] = useState(0);
+  const [userData, setUserData] = useState<{
+    value: number;
+    rank: number;
+    updatedAt?: number;
+  }>();
+
+  useEffect(() => {
+    if (account)
+      getReferrals().then(
+        ({ data, length, value, rank, updated_at: updatedAt }) => {
+          console.log(length, value, value, rank);
+          setLeaderBoard({
+            data,
+            updatedAt,
+          });
+
+          setUserData({
+            value,
+            rank,
+            updatedAt,
+          });
+          setTotalParticipants(length);
+        }
+      );
+  }, [account]);
 
   return (
     <Template

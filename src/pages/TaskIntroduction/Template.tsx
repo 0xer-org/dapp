@@ -6,6 +6,7 @@ import RankCard from "@/components/RankCard";
 import { Link } from "react-router-dom";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import useScrollToTop from "@/libs/useScrollToTop";
+import dayjs from "dayjs";
 
 enum Tabs {
   INTRO,
@@ -137,7 +138,8 @@ const Template = ({
                   Data Duration
                 </Text>
                 <Text>
-                  {task.startFrom} ~ {task.endAt}
+                  {dayjs(task.startFrom).format("YYYY-MM-DD")} ~{" "}
+                  {dayjs(task.endAt).format("YYYY-MM-DD")}
                 </Text>
                 <Divider my={4} />
               </Box>
@@ -212,7 +214,6 @@ const Template = ({
               md: "block",
             }}
           >
-            {/* @todo: connect real data */}
             <RankCard
               account={account}
               totalPaticipants={totalParticipants}

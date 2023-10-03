@@ -12,6 +12,7 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
+import dayjs from "dayjs";
 
 interface RankCardProps {
   account?: string;
@@ -69,7 +70,8 @@ const RankCard = ({
         </Table>
       </TableContainer>
       <Text my={3} align="right" color="#736B6B">
-        Data input date: {updatedAt != null ? updatedAt : "--"}
+        Data input date:{" "}
+        {updatedAt != null ? dayjs(updatedAt).format("YYYY-MM-DD") : "--"}
       </Text>
     </Box>
   ) : null;

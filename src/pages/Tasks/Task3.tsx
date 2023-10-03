@@ -18,14 +18,7 @@ import recaptchaLogo from "@/assets/images/recaptcha.png";
 import correctIcon from "@/assets/images/correct.png";
 import incorrectIcon from "@/assets/images/incorrect.png";
 import Counter from "@/components/Counter";
-
-// @todo: connect real data
-const fakeQuestions = Array.from({ length: 10 }).map((_, index) => ({
-  description: `Question ${index}`,
-  answer: Math.floor(Math.random() * 4),
-  options: ["option 1", "option 2", "option 3", "option 4"],
-  image: "https://loremflickr.com/140/140",
-}));
+import { getQuestions } from "@/api";
 
 enum STATUSES {
   IDLE,
@@ -100,7 +93,7 @@ const KnowledgeTest = () => {
   );
 
   useEffect(() => {
-    setQuestions(fakeQuestions);
+    getQuestions().then(({ data }) => setQuestions(data));
   }, []);
 
   // fetch user token id first
@@ -159,7 +152,7 @@ const KnowledgeTest = () => {
                         </Text>
                         <Progress
                           mb={3}
-                          value={progress}
+                          value={(100 * progress) / (questions.length || 1)}
                           borderColor="accent"
                           bg="#21221D"
                           borderWidth={2}
@@ -298,7 +291,7 @@ const KnowledgeTest = () => {
                         </Text>
                         <Progress
                           mb={3}
-                          value={progress}
+                          value={(100 * progress) / (questions.length || 1)}
                           borderColor="accent"
                           bg="#21221D"
                           borderWidth={2}

@@ -7,6 +7,13 @@ export const getUser = (account: string) =>
     },
   }).then((response) => response.json());
 
+export const getReferrals = () =>
+  fetch(`${SERVER_URL}/referrals`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("auth")}`,
+    },
+  }).then((response) => response.json());
+
 export const createUser = (provider: {
   type?: string;
   address?: string;

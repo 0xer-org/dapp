@@ -5,7 +5,7 @@ const { definePartsStyle, defineMultiStyleConfig } =
   createMultiStyleConfigHelpers(tableAnatomy.keys);
 
 const mdStyle = definePartsStyle({
-  th: { px: 0, textTransform: "none", letterSpacing: 1, fontSize: "md" },
+  th: { px: 0, textTransform: "none", letterSpacing: 1, fontSize: "lg" },
   td: { px: 0, pt: 4, pb: 1 },
   tbody: { py: 12 },
   thead: {
