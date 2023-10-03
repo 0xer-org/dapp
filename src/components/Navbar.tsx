@@ -10,6 +10,7 @@ import {
   Flex,
   IconButton,
   Image,
+  Link,
   Menu,
   MenuButton,
   MenuItem,
@@ -56,9 +57,13 @@ const DesktopNavigation = () => (
     <RouterLink to="/">
       <Image src={twitterLogo} width="2.5rem" />
     </RouterLink>
-    <RouterLink to="/">
+    <Link
+      href="https://testnets.opensea.io/collection/0xer-1"
+      target="_blank"
+      rel="noreferrer noopener"
+    >
       <Image src={openseaLogo} width="2.5rem" />
-    </RouterLink>
+    </Link>
   </Flex>
 );
 
@@ -108,9 +113,13 @@ const MobileNavigation = () => {
               <RouterLink to="/">
                 <Image src={twitterLogo} width="2.5rem" />
               </RouterLink>
-              <RouterLink to="/">
+              <Link
+                href="https://testnets.opensea.io/collection/0xer-1"
+                target="_blank"
+                rel="noreferrer noopener"
+              >
                 <Image src={openseaLogo} width="2.5rem" />
-              </RouterLink>
+              </Link>
             </Flex>
           </DrawerBody>
         </DrawerContent>
