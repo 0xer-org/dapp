@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Image, Link, Text } from "@chakra-ui/react";
 import arbitrumLogo from "@/assets/images/arbitrum.png";
 import ChapterAccordion from "@/components/ChapterAccordion";
 import { RouteComponentProps } from "react-router-dom";
@@ -42,7 +42,14 @@ const Main = ({ history }: { history: RouteComponentProps["history"] }) => {
             fontFamily="Cursed Timer ULiL"
             letterSpacing={1}
           >
-            {totalMint}
+            <Link
+              href="https://testnets.opensea.io/collection/0xer-1"
+              target="_blank"
+              rel="noopener noreferrer"
+              _hover={{ textDecor: "none" }}
+            >
+              {totalMint}
+            </Link>
           </Text>
           <Button
             mt={5}
