@@ -1,4 +1,4 @@
-import { createUser } from "@/api";
+import { createUser, getUser } from "@/api";
 import AccountContext from "@/context/account";
 import WalletConnectionContext from "@/context/walletConnection";
 import {
@@ -29,17 +29,19 @@ const WalletConnnectHandler = () => {
   // line register flow
   useEffect(() => {
     async function lineAuth() {
-      const accessToken = await liff.getAccessToken();
+      const lineToken = await liff.getAccessToken();
 
-      const result = await createUser({
+      const { access_token: accessToken } = await createUser({
         type: "line",
-        accessToken,
+        accessToken: lineToken,
         referrer,
       });
+
+      localStorage.setItem("auth", accessToken);
+      const result = await getUser();
       const { private_key: privateKey, claim_hash: claimHash, data } = result;
       connect(privateKey);
       setValues(data);
-      localStorage.setItem("auth", accessToken);
       // @todo: do something with claim hash
       console.log(claimHash);
     }
@@ -53,20 +55,22 @@ const WalletConnnectHandler = () => {
   useEffect(() => {
     if (account && !isFromLine) {
       (async () => {
-        const signature =
-          localStorage.getItem("auth") || (await sign(`Hello, ${account}!`));
-        if (signature) {
-          try {
-            const { data } = await createUser({
-              address: account,
-              signature,
-              referrer,
-            });
-            localStorage.setItem("auth", signature);
-            setValues(data);
-          } catch (e) {
-            localStorage.removeItem("auth");
-          }
+        let accessToken = localStorage.getItem("auth");
+        if (!accessToken) {
+          const signature = await sign(`Hello, ${account}!`);
+          const result = await createUser({
+            address: account,
+            signature,
+            referrer,
+          });
+          accessToken = result.access_token;
+          if (accessToken) localStorage.setItem("auth", accessToken);
+        }
+        try {
+          const { data } = await getUser();
+          setValues(data);
+        } catch (e) {
+          localStorage.removeItem("auth");
         }
       })();
     }

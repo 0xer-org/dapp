@@ -63,7 +63,7 @@ const withAccountContext = (Component: ComponentType) => (props: any) => {
 
   const fetchValues = useCallback(async () => {
     if (account) {
-      const { data } = await getUser(account);
+      const { data } = await getUser();
       setValues(data);
       return data;
     }

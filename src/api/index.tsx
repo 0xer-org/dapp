@@ -1,7 +1,7 @@
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
-export const getUser = (account: string) =>
-  fetch(`${SERVER_URL}/0xer/${account}`, {
+export const getUser = () =>
+  fetch(`${SERVER_URL}/me`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("auth")}`,
     },
