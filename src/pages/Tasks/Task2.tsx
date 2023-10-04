@@ -11,25 +11,18 @@ import {
 import { Link } from "react-router-dom";
 import { CopyIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import useScrollToTop from "@/libs/useScrollToTop";
-import { useCallback, useContext, useEffect } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import AccountContext from "@/context/account";
 import createInviteUrl from "@/libs/createInviteUrl";
-import ReferralLeaderboard from "@/components/ReferralLeaderboard";
+import ReferralsOverview from "@/components/ReferralsOverview";
+import { getUser } from "@/api";
+import Web3 from "web3";
 
 const Referral = () => {
   useScrollToTop();
-  const { account, id, getTokenId } = useContext(AccountContext);
+  const { account, id, values, getTokenId } = useContext(AccountContext);
+  const [references, setReferences] = useState([]);
   const toast = useToast();
-
-  // @todo :connect real data
-  const totalParticipants = 2521;
-  const data = [
-    {
-      joinedAt: Date.now(),
-      level: 2,
-      address: "0xC17D7c18162DD3c92E4Ffbd097C285c567ee927c",
-    },
-  ];
 
   const copyUrl = useCallback(() => {
     if (id) {
@@ -46,6 +39,19 @@ const Referral = () => {
   useEffect(() => {
     if (account) getTokenId();
   }, [account, getTokenId]);
+
+  useEffect(() => {
+    if (account && values) {
+      getUser().then((user) => {
+        setReferences(
+          user.references?.map(({ id, joined_at: joinedAt }: any) => ({
+            address: Web3.utils.toChecksumAddress(id),
+            joinedAt,
+          }))
+        );
+      });
+    }
+  }, [account, values]);
 
   return (
     <Box minH="calc(100vh - 94px)" bg="black" p={{ base: 3, md: 12 }}>
@@ -137,10 +143,7 @@ const Referral = () => {
                     </VStack>
                   </Box>
 
-                  <ReferralLeaderboard
-                    totalParticipants={totalParticipants}
-                    data={data}
-                  />
+                  <ReferralsOverview data={references} />
                 </>
               )}
             </VStack>
