@@ -8,7 +8,6 @@ const Intro1 = () => {
   const userData = {
     value: 38,
     rank: 1223,
-    updatedAt: Date.now(),
   };
   const leaderboard = {
     data: [
@@ -17,7 +16,6 @@ const Intro1 = () => {
         address: "0xC17D7c18162DD3c92E4Ffbd097C285c567ee927c",
       },
     ],
-    updatedAt: Date.now(),
   };
 
   return (

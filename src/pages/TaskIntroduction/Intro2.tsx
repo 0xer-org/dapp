@@ -9,33 +9,27 @@ const Intro2 = () => {
   const { account } = useContext(AccountContext);
   const [leaderboard, setLeaderBoard] = useState<{
     data: Array<{ value: number; address: string }>;
-    updatedAt?: number;
   }>({ data: [] });
   const [totalParticipants, setTotalParticipants] = useState(0);
   const [userData, setUserData] = useState<{
     value: number;
     rank: number;
-    updatedAt?: number;
   }>();
 
   useEffect(() => {
     if (account)
-      getReferrals().then(
-        ({ data, length, value, rank, updated_at: updatedAt }) => {
-          console.log(length, value, value, rank);
-          setLeaderBoard({
-            data,
-            updatedAt,
-          });
+      getReferrals().then(({ data, length, value, rank }) => {
+        console.log(length, value, value, rank);
+        setLeaderBoard({
+          data,
+        });
 
-          setUserData({
-            value,
-            rank,
-            updatedAt,
-          });
-          setTotalParticipants(length);
-        }
-      );
+        setUserData({
+          value,
+          rank,
+        });
+        setTotalParticipants(length);
+      });
   }, [account]);
 
   return (

@@ -23,7 +23,6 @@ const Referral = () => {
 
   // @todo :connect real data
   const totalParticipants = 2521;
-  const updatedAt = Date.now();
   const data = [
     {
       joinedAt: Date.now(),
@@ -42,6 +41,7 @@ const Referral = () => {
       status: "success",
     });
   }, [id, toast]);
+
   // fetch user token id first
   useEffect(() => {
     if (account) getTokenId();
@@ -92,12 +92,13 @@ const Referral = () => {
                       Copy and share your personal invite link with other
                       humans.
                     </Text>
-                    <Box
+                    <VStack
                       bg="#21221D"
                       borderWidth={2}
                       borderColor="accent"
                       px={{ base: 5, md: 8 }}
                       py={{ base: 5, md: 6 }}
+                      alignItems="stretch"
                     >
                       <Text fontWeight="bold" fontSize="lg" mb={4}>
                         Invite other humans
@@ -109,8 +110,23 @@ const Referral = () => {
                         time, you will establish a "connection" with them,
                         serving as part of your social graph in 0xer Space.
                       </Text>
-                      <Button onClick={copyUrl} variant="outlineDark">
-                        {createInviteUrl(id)}
+                      <Button
+                        onClick={copyUrl}
+                        variant="outlineDark"
+                        bg="white"
+                        color="black"
+                        fontWeight={300}
+                        display="flex"
+                        flexDir={{ base: "column", md: "row" }}
+                        py={2}
+                        height="auto"
+                        _hover={{
+                          bg: "white",
+                        }}
+                      >
+                        <Text maxW="100%" whiteSpace="normal">
+                          {createInviteUrl(id)}
+                        </Text>
                         <CopyIcon
                           mx={{ base: "auto", md: 2 }}
                           mt={{ base: 2, md: 0 }}
@@ -118,13 +134,12 @@ const Referral = () => {
                           verticalAlign={-1}
                         />
                       </Button>
-                    </Box>
+                    </VStack>
                   </Box>
 
                   <ReferralLeaderboard
                     totalParticipants={totalParticipants}
                     data={data}
-                    updatedAt={updatedAt}
                   />
                 </>
               )}

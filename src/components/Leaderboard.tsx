@@ -5,25 +5,20 @@ import {
   Flex,
   Table,
   TableContainer,
+  Tbody,
   Td,
   Text,
   Th,
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import dayjs from "dayjs";
 
 interface LeaderboardProps {
   totalParticipants?: number;
   data?: Array<{ value: number; address: string }>;
-  updatedAt?: number;
 }
 
-const Leaderboard = ({
-  totalParticipants,
-  data,
-  updatedAt,
-}: LeaderboardProps) =>
+const Leaderboard = ({ totalParticipants, data }: LeaderboardProps) =>
   !!data?.length ? (
     <Box>
       <Flex
@@ -56,7 +51,12 @@ const Leaderboard = ({
               <Th flex={{ base: 3, md: 4 }}>Address</Th>
             </Tr>
           </Thead>
-          <Box maxHeight={{ base: 460, md: 520 }} overflow="auto">
+          <Tbody
+            display="block"
+            p={0}
+            maxHeight={{ base: 460, md: 520 }}
+            overflow="auto"
+          >
             {data?.map(({ address, value }, index) => (
               <Tr
                 key={index}
@@ -79,13 +79,9 @@ const Leaderboard = ({
                 </Td>
               </Tr>
             ))}
-          </Box>
+          </Tbody>
         </Table>
       </TableContainer>
-      <Text my={3} align="right" color="#736B6B">
-        Data input date:{" "}
-        {updatedAt != null ? dayjs(updatedAt).format("YYYY-MM-DD") : "--"}
-      </Text>
     </Box>
   ) : null;
 

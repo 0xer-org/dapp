@@ -19,16 +19,9 @@ interface RankCardProps {
   value?: number;
   rank?: number;
   totalPaticipants?: number;
-  updatedAt?: number;
 }
 
-const RankCard = ({
-  account,
-  rank,
-  value,
-  totalPaticipants,
-  updatedAt,
-}: RankCardProps) =>
+const RankCard = ({ account, rank, value, totalPaticipants }: RankCardProps) =>
   account ? (
     <Box mb={10}>
       <Flex
@@ -69,10 +62,6 @@ const RankCard = ({
           </Tbody>
         </Table>
       </TableContainer>
-      <Text my={3} align="right" color="#736B6B">
-        Data input date:{" "}
-        {updatedAt != null ? dayjs(updatedAt).format("YYYY-MM-DD") : "--"}
-      </Text>
     </Box>
   ) : null;
 
