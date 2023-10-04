@@ -6,7 +6,7 @@ import { getReferrals } from "@/api";
 import AccountContext from "@/context/account";
 
 const Intro2 = () => {
-  const { account } = useContext(AccountContext);
+  const { account, values } = useContext(AccountContext);
   const [leaderboard, setLeaderBoard] = useState<{
     data: Array<{ value: number; address: string }>;
   }>({ data: [] });
@@ -17,7 +17,7 @@ const Intro2 = () => {
   }>();
 
   useEffect(() => {
-    if (account)
+    if (account && values)
       getReferrals().then(({ data, length, value, rank }) => {
         console.log(length, value, value, rank);
         setLeaderBoard({
@@ -30,7 +30,7 @@ const Intro2 = () => {
         });
         setTotalParticipants(length);
       });
-  }, [account]);
+  }, [account, values]);
 
   return (
     <Template

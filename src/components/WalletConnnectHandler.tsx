@@ -12,6 +12,7 @@ import {
   ModalOverlay,
   Text,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
 import { useContext, useEffect } from "react";
 import { useLiff } from "react-liff";
@@ -20,6 +21,7 @@ import metamaskLogo from "@/assets/images/metamask.png";
 const WalletConnnectHandler = () => {
   const { connect, account, setValues, sign } = useContext(AccountContext);
   const { isOpen, close } = useContext(WalletConnectionContext);
+  const toast = useToast();
   const params = new URLSearchParams(window.location.search);
   const referrer = params.get("referrer") || undefined;
 
@@ -29,21 +31,24 @@ const WalletConnnectHandler = () => {
   // line register flow
   useEffect(() => {
     async function lineAuth() {
-      const lineToken = await liff.getAccessToken();
+      let accessToken = localStorage.getItem("auth");
+      if (!accessToken) {
+        const lineToken = await liff.getAccessToken();
 
-      const { access_token: accessToken } = await createUser({
-        type: "line",
-        accessToken: lineToken,
-        referrer,
-      });
+        const result = await createUser({
+          type: "line",
+          accessToken: lineToken,
+          referrer,
+        });
 
-      localStorage.setItem("auth", accessToken);
+        accessToken = result.access_token as string;
+
+        localStorage.setItem("auth", accessToken);
+      }
       const result = await getUser();
-      const { private_key: privateKey, claim_hash: claimHash, data } = result;
+      const { private_key: privateKey, data } = result;
       connect(privateKey);
       setValues(data);
-      // @todo: do something with claim hash
-      console.log(claimHash);
     }
 
     if (isFromLine) {
@@ -70,11 +75,15 @@ const WalletConnnectHandler = () => {
           const { data } = await getUser();
           setValues(data);
         } catch (e) {
+          toast({
+            title:
+              "Something went wrong, please refresh you page and try again.",
+          });
           localStorage.removeItem("auth");
         }
       })();
     }
-  }, [account, setValues, isFromLine, referrer, sign]);
+  }, [account, setValues, isFromLine, referrer, sign, toast]);
 
   return (
     <Modal isOpen={isOpen && !account} onClose={close} isCentered>

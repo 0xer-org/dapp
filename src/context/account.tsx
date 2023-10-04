@@ -182,10 +182,12 @@ const withAccountContext = (Component: ComponentType) => (props: any) => {
 
     const accountChangedhandler = (accounts: string[]) => {
       console.log(`Account changed to: ${accounts[0]}`);
+      localStorage.removeItem("auth");
       setAccount(accounts[0]);
     };
     const networkChangedhandler = (networkId: string) => {
       console.log(`Account changed to: ${networkId}`);
+      localStorage.removeItem("auth");
       setChainId(parseInt(networkId, 10));
     };
     provider.on("accountsChanged", accountChangedhandler);
