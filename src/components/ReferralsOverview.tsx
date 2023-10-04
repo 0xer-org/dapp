@@ -1,7 +1,6 @@
 import { createAvatarUrl, shortenAddress } from "@/libs";
 import {
   Avatar,
-  Box,
   Flex,
   Table,
   TableContainer,

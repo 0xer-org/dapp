@@ -12,7 +12,6 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import dayjs from "dayjs";
 
 interface RankCardProps {
   account?: string;
