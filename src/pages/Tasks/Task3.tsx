@@ -17,8 +17,9 @@ import AccountContext from "@/context/account";
 import recaptchaLogo from "@/assets/images/recaptcha.png";
 import correctIcon from "@/assets/images/correct.png";
 import incorrectIcon from "@/assets/images/incorrect.png";
-import Counter from "@/components/Counter";
-import { getQuestions } from "@/api";
+import { answerQuestion, getQuestions, getUser } from "@/api";
+import counterImage from "@/assets/images/counter.png";
+import Countdown from "@/components/Countdown";
 
 enum STATUSES {
   IDLE,
@@ -28,7 +29,7 @@ enum STATUSES {
 
 const KnowledgeTest = () => {
   useScrollToTop();
-  const { account, id, getTokenId } = useContext(AccountContext);
+  const { account, values, id, getTokenId } = useContext(AccountContext);
   const [startAt, setStartAt] = useState(0);
   const [status, setStatus] = useState(STATUSES.IDLE);
   const [totalResponseTime, setTotalResponseTime] = useState(0);
@@ -53,23 +54,31 @@ const KnowledgeTest = () => {
   }, [progress, questions]);
 
   const onSelect = useCallback(
-    (value: number) => () => {
+    (value: number) => async () => {
       setSelected(value);
       const responseTime = Date.now() - startAt;
       setTotalResponseTime(totalResponseTime + responseTime);
       if (value === question.answer) {
         setScore(score + 1);
       }
-      // @todo: update data in backend
+      try {
+        await answerQuestion({
+          index: progress,
+          selected: value,
+          responseTime,
+        });
 
-      setTimeout(() => {
-        setStartAt(Date.now());
-        setSelected(-1);
-        setProgress(progress + 1);
-        if (progress === questions.length - 1) {
-          setStatus(STATUSES.SCORE);
-        }
-      }, 1000);
+        setTimeout(() => {
+          setStartAt(Date.now());
+          setSelected(-1);
+          setProgress(progress + 1);
+          if (progress === questions.length - 1) {
+            setStatus(STATUSES.SCORE);
+          }
+        }, 1000);
+      } catch (e) {
+        console.error(e);
+      }
     },
     [progress, question, questions, score, startAt, totalResponseTime]
   );
@@ -93,8 +102,27 @@ const KnowledgeTest = () => {
   );
 
   useEffect(() => {
-    getQuestions().then(({ data }) => setQuestions(data));
-  }, []);
+    if (account && values) {
+      Promise.all([getQuestions(), getUser()]).then(
+        ([{ data }, { web3_test_results: web3TestResults = [] }]) => {
+          setQuestions(data);
+          setProgress(web3TestResults.length);
+          setTotalResponseTime(
+            web3TestResults.reduce(
+              (acc: number, cur: any) => acc + cur.response_time,
+              0
+            )
+          );
+          setScore(
+            web3TestResults.reduce(
+              (acc: number, cur: any) => acc + +cur.correct,
+              0
+            )
+          );
+        }
+      );
+    }
+  }, [account, values]);
 
   // fetch user token id first
   useEffect(() => {
@@ -218,7 +246,28 @@ const KnowledgeTest = () => {
                           py={{ base: 5, md: 6 }}
                         >
                           <Flex gap={5}>
-                            <Counter resetTrigger={progress} />
+                            <Box>
+                              <Box
+                                width={"60px"}
+                                height={"60px"}
+                                position="relative"
+                              >
+                                <Image src={counterImage} width={"60px"} />
+                                <Text
+                                  position="absolute"
+                                  top={0}
+                                  width={"60px"}
+                                  align="center"
+                                  lineHeight={"60px"}
+                                >
+                                  <Countdown
+                                    from={10}
+                                    resetTrigger={progress}
+                                    onFinish={onSelect(-2)}
+                                  />
+                                </Text>
+                              </Box>
+                            </Box>
                             <Box>
                               <Text mb={2} fontWeight={500}>
                                 #{progress + 1}/{questions.length}

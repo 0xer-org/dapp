@@ -7,6 +7,27 @@ export const getUser = () =>
     },
   }).then((response) => response.json());
 
+export const answerQuestion = ({
+  index,
+  responseTime,
+  selected,
+}: {
+  index: number;
+  selected: number;
+  responseTime: number;
+}) =>
+  fetch(`${SERVER_URL}/questions/${index}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("auth")}`,
+    },
+    body: JSON.stringify({
+      selected,
+      responseTime,
+    }),
+  }).then((response) => response.json());
+
 export const getQuestions = () =>
   fetch(`${SERVER_URL}/questions`, {
     headers: {
