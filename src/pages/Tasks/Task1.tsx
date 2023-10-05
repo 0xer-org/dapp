@@ -29,7 +29,12 @@ import smsLogo from "@/assets/images/sms.png";
 import faceLogo from "@/assets/images/face.png";
 import StageCard from "@/components/StageCard";
 import { CheckIcon, CloseIcon, ExternalLinkIcon } from "@chakra-ui/icons";
-import { sendSMSMessage, verifyRecaptcha, verifySMSMessage } from "@/api";
+import {
+  getUser,
+  sendSMSMessage,
+  verifyRecaptcha,
+  verifySMSMessage,
+} from "@/api";
 import Countdown from "@/components/Countdown";
 import { useLiff } from "react-liff";
 import { Link } from "react-router-dom";
@@ -108,8 +113,7 @@ const Verify = () => {
   );
 
   const onVerifySuccessClick = useCallback(
-    () =>
-      lineMode ? () => liff.closeWindow() : finishVerificationProcess(true),
+    () => (lineMode ? liff.closeWindow() : finishVerificationProcess(true)()),
     [finishVerificationProcess, liff, lineMode]
   );
 
@@ -131,15 +135,11 @@ const Verify = () => {
 
   // fetch verification status
   useEffect(() => {
-    if (!values) return setLevel(0);
-    const parsedValue = parseInt(values?.slice(0, 2) || "0");
-    const parsedLevel =
-      1 +
-      (parsedValue & 1) +
-      ((parsedValue >> 1) & 1) +
-      ((parsedValue >> 2) & 1);
-    setLevel(parsedLevel);
-  }, [values]);
+    if (account && values)
+      getUser().then(({ verification_results: verificationResults }) =>
+        setLevel((verificationResults?.length || 0) + 1)
+      );
+  }, [account, values]);
 
   return (
     <>

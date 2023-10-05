@@ -104,6 +104,5 @@ export const verifySMSMessage = ({
     },
     body: JSON.stringify({ code }),
   }).then((response) => {
-    console.log(response);
     return response.status === 200 ? Promise.resolve() : Promise.reject();
   });
