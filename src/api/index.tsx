@@ -35,8 +35,8 @@ export const getQuestions = () =>
     },
   }).then((response) => response.json());
 
-export const getReferrals = () =>
-  fetch(`${SERVER_URL}/referrals`, {
+export const getLeaderboard = (offset: number) =>
+  fetch(`${SERVER_URL}/leaderboard/${offset.toString(16)}`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("auth")}`,
     },

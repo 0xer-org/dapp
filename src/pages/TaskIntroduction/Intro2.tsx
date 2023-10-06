@@ -2,7 +2,7 @@ import { ListItem, UnorderedList } from "@chakra-ui/react";
 import Template from "./Template";
 import algorithmPicture from "@/assets/images/algorithm.png";
 import { useContext, useEffect, useState } from "react";
-import { getReferrals } from "@/api";
+import { getLeaderboard } from "@/api";
 import AccountContext from "@/context/account";
 
 const Intro2 = () => {
@@ -18,16 +18,10 @@ const Intro2 = () => {
 
   useEffect(() => {
     if (account && values)
-      getReferrals().then(({ data, length, value, rank }) => {
-        console.log(length, value, value, rank);
-        setLeaderBoard({
-          data,
-        });
+      getLeaderboard(0x50).then(({ data, length, user }) => {
+        setLeaderBoard({ data });
 
-        setUserData({
-          value,
-          rank,
-        });
+        setUserData(user);
         setTotalParticipants(length);
       });
   }, [account, values]);
