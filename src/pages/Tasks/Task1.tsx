@@ -1,5 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+import { useGoogleLogin } from "@react-oauth/google";
 // @ts-expect-error no v3 types provided
 import RecaptchaV2 from "react-google-recaptcha";
 import {
@@ -32,6 +33,7 @@ import { CheckIcon, CloseIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import {
   getUser,
   sendSMSMessage,
+  verifyOauthResponse,
   verifyRecaptcha,
   verifySMSMessage,
 } from "@/api";
@@ -64,6 +66,18 @@ const Verify = () => {
   const { executeRecaptcha } = useGoogleReCaptcha();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isReady, liff } = useLiff();
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: ({ access_token: token }) => {
+      if (account)
+        verifyOauthResponse({ provider: "google", account, token })
+          .then(() => setVerificationStatus(VerificationStatus.SUCCESS))
+          .catch(() => setVerificationStatus(VerificationStatus.ERROR));
+    },
+    onError: () => {
+      setVerificationStatus(VerificationStatus.ERROR);
+    },
+  });
 
   const sendMessage = useCallback(() => {
     if (account) {
@@ -132,6 +146,39 @@ const Verify = () => {
     },
     [account, executeRecaptcha, lineCallback]
   );
+
+  // initialize apple login button
+  useEffect(() => {
+    if (isOpen && level === 3) {
+      const successHandler = async (event: any) => {
+        // Handle successful response.
+        const { id_token: token } = event?.detail?.authorization || {};
+        if (account)
+          verifyOauthResponse({ provider: "apple", account, token })
+            .then(() => setVerificationStatus(VerificationStatus.SUCCESS))
+            .catch(() => setVerificationStatus(VerificationStatus.ERROR));
+      };
+      const errorHandler = () =>
+        setVerificationStatus(VerificationStatus.ERROR);
+      setTimeout(() => {
+        (window as any).AppleID.auth.init({
+          clientId: "signing.org.0xer.app",
+          scope: "name email",
+          redirectURI: `${window.location.origin}/tasks/1`,
+          usePopup: true,
+        });
+        // Listen for authorization success.
+        document.addEventListener("AppleIDSignInOnSuccess", successHandler);
+        // Listen for authorization failures.
+        document.addEventListener("AppleIDSignInOnFailure", errorHandler);
+      }, 0);
+
+      return () => {
+        document.removeEventListener("AppleIDSignInOnSuccess", successHandler);
+        document.removeEventListener("AppleIDSignInOnSuccess", errorHandler);
+      };
+    }
+  }, [account, isOpen, level]);
 
   // fetch verification status
   useEffect(() => {
@@ -284,7 +331,33 @@ const Verify = () => {
                     </Box>
                   );
                 case level === 3:
-                  return <Box>Coming Soon</Box>;
+                  return (
+                    <Box>
+                      <Text my={3}>用你的手機進行人臉登入或是指紋登入</Text>
+                      <Text mb={4}>
+                        Complete the verification using your Apple or Google
+                        account.
+                      </Text>
+                      <VStack my={5} alignItems="center" gap={3}>
+                        <Button
+                          variant="outlineDark"
+                          size="lg"
+                          onClick={() => googleLogin()}
+                        >
+                          Connect with Google
+                        </Button>
+                        <Box>
+                          <div
+                            id="appleid-signin"
+                            data-color="white"
+                            data-type="sign in"
+                            data-mode="center-align"
+                            className="apple-login-button"
+                          />
+                        </Box>
+                      </VStack>
+                    </Box>
+                  );
               }
             })()}
           </ModalBody>

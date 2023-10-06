@@ -103,6 +103,26 @@ export const verifySMSMessage = ({
       Authorization: `Bearer ${localStorage.getItem("auth")}`,
     },
     body: JSON.stringify({ code }),
-  }).then((response) => {
-    return response.status === 200 ? Promise.resolve() : Promise.reject();
-  });
+  }).then((response) =>
+    response.status === 200 ? Promise.resolve() : Promise.reject()
+  );
+
+export const verifyOauthResponse = ({
+  provider,
+  account,
+  token,
+}: {
+  provider: string;
+  account: string;
+  token: string;
+}) =>
+  fetch(`${SERVER_URL}/0xer/${account}/verification/oauth`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("auth")}`,
+    },
+    body: JSON.stringify({ provider, token }),
+  }).then((response) =>
+    response.status === 200 ? Promise.resolve() : Promise.reject()
+  );

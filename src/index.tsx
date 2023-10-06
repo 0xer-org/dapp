@@ -5,17 +5,22 @@ import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider } from "@chakra-ui/react";
 import theme from "./theme";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
+const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID || "";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <GoogleReCaptchaProvider reCaptchaKey="6LdWFlYnAAAAAHE2RE4GHQcI4qQ3I74sLGtAYAqn">
-      <ChakraProvider theme={theme}>
-        <App />
-      </ChakraProvider>
-    </GoogleReCaptchaProvider>
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <GoogleReCaptchaProvider reCaptchaKey="6LdWFlYnAAAAAHE2RE4GHQcI4qQ3I74sLGtAYAqn">
+        <ChakraProvider theme={theme}>
+          <App />
+        </ChakraProvider>
+      </GoogleReCaptchaProvider>
+    </GoogleOAuthProvider>
   </React.StrictMode>
 );
 

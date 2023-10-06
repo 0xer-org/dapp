@@ -62,6 +62,10 @@ const theme = extendTheme({
       ".grecaptcha-badge": {
         visibility: "hidden",
       },
+      ".apple-login-button": {
+        width: "100%",
+        height: "3rem",
+      },
     },
   },
 });
