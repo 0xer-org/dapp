@@ -38,8 +38,8 @@ const StageCard = ({
     <Box>
       {current === level - 1 && <Text mb={4}>Next</Text>}
       <Box p={5} bg="#21221D" border="1px solid #52534F">
-        <Flex gap={3} align="cennter">
-          {current > level && <CompletedIcon />}
+        <Flex gap={3} align="center">
+          {current > level && <CompletedIcon checked={true} />}
           <Text fontSize="lg">Level {level}</Text>
         </Flex>
         <Flex alignItems="center" gap={5} mt={3}>
