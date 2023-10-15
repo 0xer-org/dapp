@@ -363,7 +363,6 @@ const Main = ({ history }: { history: RouteComponentProps["history"] }) => {
           The Plan
         </Text>
 
-        {/* @todo: chapters content */}
         <ChapterAccordion
           chapters={[
             {
@@ -384,33 +383,33 @@ const Main = ({ history }: { history: RouteComponentProps["history"] }) => {
               chapter: 2,
               title:
                 "Aggregate More Important Human Characteristics into On-Chain Data",
-              content: "",
+              content: `In the 0xer universe, human identity is not a static snapshot, but a dynamic, evolving crypto entity. With soul-bound NFT, 0xer allows users to preserve the multi-dimensional aspects of their characteristics and encode the data that goes on the chain. This data can be provided directly on the chain, authorized by individuals, or manually provided from physical, digital, spiritual and social levels.`,
             },
             {
               chapter: 3,
               title: "Identifying the Leaders Among the Human Traits",
-              content: "",
+              content: `0xer Identifying the leading traits among the myriad of human characteristics becomes critical: these traits not only describe us, but also guide our collective journey.People who share the same traits form communities through decentralized voting and governance tokens, and can customize the algorithms for these traits, creating computable humans and algorithm DAOs.`,
             },
             {
               chapter: 4,
               title:
                 "Crossing the Web2 & Web3 Networks to Welcome More Powerful People",
-              content: "",
+              content: `The 0xer is not an isolated digital island, but a hub connecting the Web2 and Web3 worlds. By extending the data cover of these networks, we welcome more non-web3 developers to join us in exploring the endless possibilities of the human network of the next era. Through APIs and on-chain human verification mechanisms, non-web3 applications can integrate 0xer services, enabling users to manage their data autonomously and extend it across the Internet.`,
             },
             {
               chapter: 5,
               title: "Organize People and Start Producing and Building!",
-              content: "",
+              content: `Using Ray Dalio and Bridgewater Associates' Dot Collector technology, designed for talent management and collaborative facilitation, the 0xer community can accurately assess each user's strengths based on their unique characteristics and skills. Users with similar strengths can then come together to form specialized sub-communities. These sub-communities then serve as key drivers for project progress and overall development in our decentralised society.`,
             },
             {
               chapter: 6,
               title: "Building a Stable and Reliable Economy System",
-              content: "",
+              content: `The strength of a society is based on its economic foundation. At 0xer, we aim to build an economic system that is both transparent and fair, as well as stable and reliable. 0xer is committed to developing an economy based on user-driven data. When people have autonomous ownership of diverse and valuable data, it opens the door for the reconfiguration of innovative business models in both the physical and digital worlds. In addition, the concept of Universal Basic Income (UBI), which many aspire to, will become more possible in such an environment.`,
             },
             {
               chapter: 7,
               title: "Living Together in a Perpetual Network",
-              content: "",
+              content: `The ultimate goal of 0xer is to create a society that includes real human identities, trusted credentials, a network of values, a balanced economy, and ultimately an enduring social fabric. This is not just a network of computers, but a network built on trust, respect and mutual benefit. As we continue to grow and evolve, this network will serve as the foundation for a new kind of society - one that is truly decentralized and free. We invite you, who have patiently read up to Chapter 7, to join us in this ambitious endeavor.`,
             },
           ]}
         />

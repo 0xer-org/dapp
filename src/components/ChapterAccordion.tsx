@@ -15,7 +15,7 @@ interface ChapterAccordionProps {
 }
 
 const ChapterAccordion = ({ chapters }: ChapterAccordionProps) => (
-  <Accordion flex={4} height={600} maxW={1000} allowMultiple defaultIndex={[1]}>
+  <Accordion flex={4} maxW={1000} allowMultiple defaultIndex={[1]}>
     {chapters.map(({ chapter, title, content }) => (
       <AccordionItem
         key={chapter}
