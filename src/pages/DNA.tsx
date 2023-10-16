@@ -1,4 +1,4 @@
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -19,10 +19,13 @@ import humanLogo from "@/assets/images/human.png";
 import lockOpenLogo from "@/assets/images/lock-open.png";
 import communityLogo from "@/assets/images/community.png";
 import lightBulbLogo from "@/assets/images/Lightbulb.png";
-import { getSignature } from "@/api";
+import { getLeaderboard, getSignature } from "@/api";
 
 const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
   const { account, values, submit } = useContext(AccountContext);
+  const [verification, setVerification] = useState<
+    Array<{ value: number; rank: number; total: number }>
+  >([]);
   const toast = useToast();
 
   const authStatus = values ? parseInt(values.slice(0, 2), 16) : 0;
@@ -52,6 +55,19 @@ const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
     );
   }, [submit, toast]);
 
+  useEffect(() => {
+    if (hasNFT)
+      Promise.all([
+        getLeaderboard(0x00),
+        getLeaderboard(0x50),
+        getLeaderboard(0xc0),
+      ]).then((ranks) =>
+        setVerification(
+          ranks.map(({ length, user }) => ({ total: length, ...user }))
+        )
+      );
+  }, [hasNFT]);
+
   return (
     <Flex py={20} maxW={1440} mx="auto">
       <Flex flexDirection="column" mb={20} px={5}>
@@ -72,6 +88,7 @@ const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
         <NFTRenderer values={values} size={{ base: "100%", lg: 750 }} />
         {hasNFT && (
           <Flex mt={5} gap={5} justifyContent="flex-end">
+            {/* @todo: connect real data time */}
             <Text color="black" fontWeight={300}>
               Last Update: 2023.07.15 22:12:00 <br />
               On-Chain Update: 2023.07.15 22:12:00
@@ -109,8 +126,10 @@ const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
                   <Box color="black">
                     <Text mb={3}>#Humanity Index {"{0x(0000)}"}</Text>
                     <UnorderedList fontWeight={300}>
-                      <ListItem>Value [29/255]</ListItem>
-                      <ListItem>Rank [1721/24131]</ListItem>
+                      <ListItem>Value [{verification[0]?.value}/255]</ListItem>
+                      <ListItem>
+                        Rank [{verification[0]?.rank}/{verification[0]?.total}]
+                      </ListItem>
                       <ListItem>Task: #001 Proof of Humanity</ListItem>
                     </UnorderedList>
                   </Box>
@@ -128,9 +147,11 @@ const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
                   <Box color="black">
                     <Text mb={3}>#Community Builder Index {"{0x(0050)}"}</Text>
                     <UnorderedList fontWeight={300}>
-                      <ListItem>Value [29/255]</ListItem>
-                      <ListItem>Rank [1721/24131]</ListItem>
-                      <ListItem>Task: #001 Proof of Humanity</ListItem>
+                      <ListItem>Value [{verification[1]?.value}/255]</ListItem>
+                      <ListItem>
+                        Rank [{verification[1]?.rank}/{verification[1]?.total}]
+                      </ListItem>
+                      <ListItem>Task: #002 Invite more humans to join</ListItem>
                     </UnorderedList>
                   </Box>
                 </Flex>
@@ -149,9 +170,11 @@ const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
                       #Web3 Knowledge Level Index {"{0x(00C0)}"}
                     </Text>
                     <UnorderedList fontWeight={300}>
-                      <ListItem>Value [29/255]</ListItem>
-                      <ListItem>Rank [1721/24131]</ListItem>
-                      <ListItem>Task: #001 Proof of Humanity</ListItem>
+                      <ListItem>Value [{verification[2]?.value}/255]</ListItem>
+                      <ListItem>
+                        Rank [{verification[2]?.rank}/{verification[2]?.total}]
+                      </ListItem>
+                      <ListItem>Task: #003 Web3 Knowledge Test</ListItem>
                     </UnorderedList>
                   </Box>
                 </Flex>
