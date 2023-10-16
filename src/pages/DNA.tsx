@@ -1,13 +1,15 @@
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import {
   Box,
   Button,
   Center,
   Flex,
   Image,
+  Link,
   ListItem,
   Text,
   UnorderedList,
+  useToast,
 } from "@chakra-ui/react";
 import AccountContext from "@/context/account";
 import NFTRenderer from "@/components/NFTRenderer";
@@ -17,12 +19,38 @@ import humanLogo from "@/assets/images/human.png";
 import lockOpenLogo from "@/assets/images/lock-open.png";
 import communityLogo from "@/assets/images/community.png";
 import lightBulbLogo from "@/assets/images/Lightbulb.png";
+import { getSignature } from "@/api";
 
 const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
-  const { account, values } = useContext(AccountContext);
+  const { account, values, submit } = useContext(AccountContext);
+  const toast = useToast();
 
-  const authStatus = values ? parseInt(values.slice(0, 2), 10) : 0;
+  const authStatus = values ? parseInt(values.slice(0, 2), 16) : 0;
   const hasNFT = !!account && !!authStatus;
+
+  const submitData = useCallback(async () => {
+    const { signature } = await getSignature();
+    submit(signature).then((txHash) =>
+      toast({
+        title: txHash ? (
+          <Text>
+            Update Successfully!{" "}
+            <Link
+              href={`https://arbiscan.io/tx/${txHash}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              textDecor="underline"
+            >
+              Check the transaction
+            </Link>
+          </Text>
+        ) : (
+          <Text>Somthing went wrong! Try again later.</Text>
+        ),
+        status: txHash ? "success" : "error",
+      })
+    );
+  }, [submit, toast]);
 
   return (
     <Flex py={20} maxW={1440} mx="auto">
@@ -49,8 +77,9 @@ const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
               On-Chain Update: 2023.07.15 22:12:00
             </Text>
             <Box>
-              {/* @todo: finish the function*/}
-              <Button variant="outline">Submit Data to Chain</Button>
+              <Button variant="outline" onClick={submitData}>
+                Submit Data to Chain
+              </Button>
             </Box>
           </Flex>
         )}

@@ -13767,6 +13767,13 @@ web3-errors@^1.0.0:
   dependencies:
     web3-types "^1.0.0"
 
+web3-errors@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/web3-errors/-/web3-errors-1.1.2.tgz#aa60ed7ca3e0e00039f0e2556c8c5b840a0f1399"
+  integrity sha512-qlyuV5r6MzjLasIalVWBIIfW4Y7hBX2bZv8TRnXvI1EjiZ36zIFKgE9RF+/iRBjXmOsvIUQQ2Z9gMvYGfOwUwQ==
+  dependencies:
+    web3-types "^1.2.0"
+
 web3-eth-abi@1.10.0:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/web3-eth-abi/-/web3-eth-abi-1.10.0.tgz#53a7a2c95a571e205e27fd9e664df4919483cce1"
@@ -14076,6 +14083,11 @@ web3-types@^1.0.0:
   resolved "https://registry.yarnpkg.com/web3-types/-/web3-types-1.0.0.tgz#086dddd9696f137620f6a5054dec7c154cccbc5e"
   integrity sha512-X6MwXgaZmSCEmqwLnUYVVDn5N3G8RlKStizyy+yOK7qP2VHflM8Pk9ja3VifIXmT1cHgdfLKNBapwAict1X+IA==
 
+web3-types@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/web3-types/-/web3-types-1.2.0.tgz#176bfe53d7e46c2488d6b95c98df8f6cb1fe1375"
+  integrity sha512-ljx8mrkrOI8fRqvgOdxfpKYoso6n7I8T9LsqXl+Mz2Db0L+2H15an0xgdoWYpKndTPiU2NKRWFiopYifBQzcxQ==
+
 web3-utils@1.10.0:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/web3-utils/-/web3-utils-1.10.0.tgz#ca4c1b431a765c14ac7f773e92e0fd9377ccf578"
@@ -14099,6 +14111,16 @@ web3-utils@^4.0.1:
     web3-types "^1.0.0"
     web3-validator "^1.0.0"
 
+web3-utils@^4.0.6:
+  version "4.0.6"
+  resolved "https://registry.yarnpkg.com/web3-utils/-/web3-utils-4.0.6.tgz#37c30cb884e1ccfecb752269bc7ff285105f4c0a"
+  integrity sha512-nLVtMf9mWTX604XiQQkWZlHLCag9GdHfQtnGJDNaDssTLUx5SpOm1CjhKCHcVcAH/QazEsWcLqUAuyqwKST1kA==
+  dependencies:
+    ethereum-cryptography "^2.0.0"
+    web3-errors "^1.1.2"
+    web3-types "^1.2.0"
+    web3-validator "^2.0.2"
+
 web3-validator@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/web3-validator/-/web3-validator-1.0.0.tgz#65860fd735b77c20927f53c2a0a0bb5776460585"
@@ -14109,6 +14131,17 @@ web3-validator@^1.0.0:
     util "^0.12.5"
     web3-errors "^1.0.0"
     web3-types "^1.0.0"
+
+web3-validator@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/web3-validator/-/web3-validator-2.0.2.tgz#c0d411371c5ab75806c8ad958276171678b8ddb9"
+  integrity sha512-9sQ5owd2UldTsva3o3htj2fTPpbmUwb4TfBXhjIkew8FyT0ss3DPI+j3p6XrfdxIVBEQ5r17YUakElDV99aW+A==
+  dependencies:
+    ethereum-cryptography "^2.0.0"
+    util "^0.12.5"
+    web3-errors "^1.1.2"
+    web3-types "^1.2.0"
+    zod "^3.21.4"
 
 web3@1.10.0:
   version "1.10.0"
@@ -14743,3 +14776,8 @@ yocto-queue@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
+
+zod@^3.21.4:
+  version "3.22.4"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.22.4.tgz#f31c3a9386f61b1f228af56faa9255e845cf3fff"
+  integrity sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==

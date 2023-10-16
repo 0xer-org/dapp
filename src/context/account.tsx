@@ -12,11 +12,12 @@ import HDWalletProvider from "@truffle/hdwallet-provider";
 import ABI from "@/abi.json";
 import { useToast } from "@chakra-ui/react";
 import { getUser } from "@/api";
-
+import { asciiToHex } from "web3-utils";
 interface AccountContextType {
   account?: string;
   id?: number;
   sign: (message: string) => Promise<string | null>;
+  submit: (signature: string) => Promise<string | null>;
   connect: (privateKey?: string) => void;
   getTokenId: () => Promise<number | undefined>;
   fetchValues: () => Promise<string | undefined>;
@@ -31,6 +32,7 @@ const RPC = process.env.REACT_APP_RPC || "";
 const AccountContext = createContext<AccountContextType>({
   connect: () => {},
   sign: async () => null,
+  submit: async () => null,
   getTokenId: async () => undefined,
   fetchValues: async () => undefined,
   setValues: () => undefined,
@@ -173,6 +175,25 @@ const withAccountContext = (Component: ComponentType) => (props: any) => {
     [account]
   );
 
+  const submit = useCallback(
+    async (signature: string) => {
+      if (!values) return;
+      const contract = contractRef.current;
+      if (!account || !contract) return;
+      const id = await getTokenId();
+      try {
+        const { transactionHash } = await contract.methods
+          .update(id, `0x${values}`, signature)
+          .send();
+        return transactionHash;
+      } catch (e) {
+        console.error(e);
+        return undefined;
+      }
+    },
+    [account, getTokenId, values]
+  );
+
   // detect account switch
   useEffect(() => {
     if (!providerRef.current) return;
@@ -221,6 +242,7 @@ const withAccountContext = (Component: ComponentType) => (props: any) => {
         id,
         connect,
         sign,
+        submit,
         getTokenId,
         fetchValues,
         setValues,

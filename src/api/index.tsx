@@ -35,6 +35,13 @@ export const getQuestions = () =>
     },
   }).then((response) => response.json());
 
+export const getSignature = () =>
+  fetch(`${SERVER_URL}/0xer/signature`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("auth")}`,
+    },
+  }).then((response) => response.json());
+
 export const getLeaderboard = (offset: number) =>
   fetch(`${SERVER_URL}/leaderboard/${offset.toString(16)}`, {
     headers: {
