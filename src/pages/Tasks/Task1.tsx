@@ -1,6 +1,8 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { useGoogleLogin } from "@react-oauth/google";
+import { useLiff } from "react-liff";
+import { Link } from "react-router-dom";
 // @ts-expect-error no v3 types provided
 import RecaptchaV2 from "react-google-recaptcha";
 import {
@@ -11,6 +13,7 @@ import {
   Container,
   Divider,
   Flex,
+  Image,
   Input,
   Modal,
   ModalBody,
@@ -23,11 +26,6 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-import AccountContext from "@/context/account";
-import LevelIcon from "@/components/LevelIcon";
-import recaptchaLogo from "@/assets/images/recaptcha.png";
-import smsLogo from "@/assets/images/sms.png";
-import faceLogo from "@/assets/images/face.png";
 import StageCard from "@/components/StageCard";
 import { CheckIcon, CloseIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import {
@@ -38,11 +36,17 @@ import {
   verifySMSMessage,
 } from "@/api";
 import Countdown from "@/components/Countdown";
-import { useLiff } from "react-liff";
-import { Link } from "react-router-dom";
+
 import CountryCodeMenu from "@/components/CountryCodeMenu";
 import useScrollToTop from "@/libs/useScrollToTop";
 import isInLineBrowser from "@/libs/isInLineBrowser";
+
+import AccountContext from "@/context/account";
+import LevelIcon from "@/components/LevelIcon";
+import recaptchaLogo from "@/assets/images/recaptcha.png";
+import smsLogo from "@/assets/images/sms.png";
+import faceLogo from "@/assets/images/face.png";
+import googleLogo from "@/assets/images/google.png";
 
 enum VerificationStatus {
   IDLE,
@@ -340,17 +344,27 @@ const Verify = () => {
                       </Text>
                       <VStack my={5} alignItems="center" gap={3}>
                         <Button
-                          variant="outlineDark"
+                          variant="outline"
+                          bg="white"
                           size="lg"
+                          width="302px"
+                          borderRadius={8}
+                          fontFamily="apple-button-font-0"
+                          fontSize="20px"
+                          border="none"
+                          _hover={{
+                            bg: "white",
+                          }}
                           onClick={() => googleLogin()}
                         >
-                          Connect with Google
+                          <Image width={4} src={googleLogo} mr={2} />
+                          Continue in with Google
                         </Button>
                         <Box>
                           <div
                             id="appleid-signin"
                             data-color="white"
-                            data-type="sign in"
+                            data-type="continue"
                             data-mode="center-align"
                             className="apple-login-button"
                           />
