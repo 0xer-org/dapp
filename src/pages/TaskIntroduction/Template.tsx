@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import useScrollToTop from "@/libs/useScrollToTop";
 import dayjs from "dayjs";
+import Collapsible from "@/components/Collapsible";
 
 enum Tabs {
   INTRO,
@@ -133,53 +134,83 @@ const Template = ({
                 <Divider my={4} />
               </Box>
 
-              <Box pb={8}>
-                <Text fontSize="xl" fontWeight="bold" mb={3}>
-                  Data Duration
-                </Text>
+              <Collapsible
+                title="Data Duration"
+                titleProps={{
+                  fontSize: "xl",
+                  fontWeight: "bold",
+                  mb: 3,
+                }}
+                pb={4}
+              >
                 <Text>
                   {dayjs(task.startFrom).format("YYYY-MM-DD")} ~{" "}
                   {dayjs(task.endAt).format("YYYY-MM-DD")}
                 </Text>
-                <Divider my={4} />
-              </Box>
+              </Collapsible>
+              <Divider mb={8} />
 
-              <Box pb={8}>
-                <Text fontSize="xl" fontWeight="bold" mb={3}>
-                  Method
-                </Text>
+              <Collapsible
+                title="Method"
+                titleProps={{
+                  fontSize: "xl",
+                  fontWeight: "bold",
+                  mb: 3,
+                }}
+                pb={4}
+              >
                 <Text>{method}</Text>
-                <Divider my={4} />
-              </Box>
+              </Collapsible>
+              <Divider mb={8} />
 
-              <Box pb={8}>
-                <Text fontSize="xl" fontWeight="bold" mb={3}>
-                  Parameters
-                </Text>
+              <Collapsible
+                title="Parameters"
+                titleProps={{
+                  fontSize: "xl",
+                  fontWeight: "bold",
+                  mb: 3,
+                }}
+                pb={4}
+              >
                 <Box>{parameters}</Box>
-                <Divider my={4} />
-              </Box>
+              </Collapsible>
+              <Divider mb={8} />
 
-              <Box pb={8}>
-                <Text fontSize="xl" fontWeight="bold" mb={3}>
-                  Formula
-                </Text>
+              <Collapsible
+                title="Formula"
+                titleProps={{
+                  fontSize: "xl",
+                  fontWeight: "bold",
+                  mb: 3,
+                }}
+                pb={4}
+              >
                 <Box>{formula}</Box>
-                <Divider my={4} />
-              </Box>
+              </Collapsible>
+              <Divider mb={8} />
 
-              <Box pb={8}>
-                <Text fontSize="xl" fontWeight="bold" mb={3}>
-                  Algorithm
-                </Text>
+              <Collapsible
+                title="Algorithm"
+                titleProps={{
+                  fontSize: "xl",
+                  fontWeight: "bold",
+                  mb: 3,
+                }}
+                pb={4}
+              >
                 <Image src={algorithm} />
-                <Divider my={4} />
-              </Box>
+              </Collapsible>
+              <Divider mb={8} />
 
-              <Box pb={8}>
-                <Text fontSize="xl" fontWeight="bold" mb={3}>
-                  Data Dao
-                </Text>
+              <Collapsible
+                title="Data Dao"
+                titleProps={{
+                  fontSize: "xl",
+                  fontWeight: "bold",
+                  mb: 3,
+                }}
+                pb={4}
+              >
                 <Text>
                   Holders of governance tokens who are among the top 10,000
                   users have the authority to propose and vote on algorithm
@@ -188,21 +219,26 @@ const Template = ({
                 <Text color="#736B6B" mt={4}>
                   Not available until reaching 100,000 users.
                 </Text>
-                <Divider my={4} />
-              </Box>
+              </Collapsible>
+              <Divider mb={8} />
 
-              <Box pb={8}>
-                <Text fontSize="xl" fontWeight="bold" mb={3}>
-                  Data-using Partners
-                </Text>
+              <Collapsible
+                title="Data-using Partners"
+                titleProps={{
+                  fontSize: "xl",
+                  fontWeight: "bold",
+                  mb: 3,
+                }}
+                pb={4}
+              >
                 <Text>
                   Third-party applications such as dApps or apps can directly
                   access data on the blockchain, or obtain the rights to use
                   this data through API requests. Visit 0xer nexus partner
                   program for detailed information.
                 </Text>
-                <Divider my={4} />
-              </Box>
+              </Collapsible>
+              <Divider mb={8} />
             </Box>
           </Box>
           <Box
