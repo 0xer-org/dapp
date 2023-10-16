@@ -1,5 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import {
+  Avatar,
   Box,
   Button,
   Center,
@@ -13,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import AccountContext from "@/context/account";
 import NFTRenderer from "@/components/NFTRenderer";
-import { shortenAddress } from "@/libs";
+import { createAvatarUrl, shortenAddress } from "@/libs";
 import { RouteComponentProps } from "react-router-dom";
 import humanLogo from "@/assets/images/human.png";
 import lockOpenLogo from "@/assets/images/lock-open.png";
@@ -81,7 +82,11 @@ const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
             bg="white"
             border="2px solid black"
           >
-            <Box mr={2}>Owner</Box>
+            <Avatar
+              src={createAvatarUrl(account)}
+              size={{ base: "xs", md: "sm" }}
+            />
+            <Box mx={3}>Owner</Box>
             <Box fontWeight="bold">{shortenAddress(account || "")}</Box>
           </Center>
         )}
