@@ -152,9 +152,12 @@ const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
                   <Box color="black">
                     <Text mb={3}>#Community Builder Index {"{0x(0050)}"}</Text>
                     <UnorderedList fontWeight={300}>
-                      <ListItem>Value [{verification[1]?.value}/255]</ListItem>
                       <ListItem>
-                        Rank [{verification[1]?.rank}/{verification[1]?.total}]
+                        Value [{verification[1]?.value || 0}/255]
+                      </ListItem>
+                      <ListItem>
+                        Rank [{verification[1]?.rank || "--"}/
+                        {verification[1]?.total || 0}]
                       </ListItem>
                       <ListItem>Task: #002 Invite more humans to join</ListItem>
                     </UnorderedList>
@@ -175,9 +178,12 @@ const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
                       #Web3 Knowledge Level Index {"{0x(00C0)}"}
                     </Text>
                     <UnorderedList fontWeight={300}>
-                      <ListItem>Value [{verification[2]?.value}/255]</ListItem>
                       <ListItem>
-                        Rank [{verification[2]?.rank}/{verification[2]?.total}]
+                        Value [{verification[2]?.value || 0}/255]
+                      </ListItem>
+                      <ListItem>
+                        Rank [{verification[2]?.rank || "--"}/
+                        {verification[2]?.total || 0}]
                       </ListItem>
                       <ListItem>Task: #003 Web3 Knowledge Test</ListItem>
                     </UnorderedList>
