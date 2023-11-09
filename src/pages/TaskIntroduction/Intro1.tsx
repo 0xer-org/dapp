@@ -1,6 +1,6 @@
 import { ListItem, UnorderedList } from "@chakra-ui/react";
 import Template from "./Template";
-import algorithmPicture from "@/assets/images/algorithm.png";
+import algorithmImage from "@/assets/images/algorithm-1.png";
 import { useContext, useEffect, useState } from "react";
 import AccountContext from "@/context/account";
 import { getLeaderboard } from "@/api";
@@ -55,7 +55,7 @@ const Intro1 = () => {
         </UnorderedList>
       }
       formula="humanity_index = (w1 * recaptcha_v2 + w2 * recaptcha_v3 + w3 * sms_verification + w4 * biometric_verification) * 255"
-      algorithm={algorithmPicture}
+      algorithm={algorithmImage}
       totalParticipants={totalParticipants}
       userData={userData}
       leaderboard={leaderboard}

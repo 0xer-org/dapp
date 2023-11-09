@@ -1,6 +1,6 @@
 import { ListItem, UnorderedList } from "@chakra-ui/react";
 import Template from "./Template";
-import algorithmPicture from "@/assets/images/algorithm.png";
+import algorithmImage from "@/assets/images/algorithm-3.png";
 import { useContext, useEffect, useState } from "react";
 import AccountContext from "@/context/account";
 import { getLeaderboard } from "@/api";
@@ -59,7 +59,7 @@ const Intro3 = () => {
         </UnorderedList>
       }
       formula="web3_knowledge_level = [(C/N) * 255]"
-      algorithm={algorithmPicture}
+      algorithm={algorithmImage}
       totalParticipants={totalParticipants}
       userData={userData}
       leaderboard={leaderboard}

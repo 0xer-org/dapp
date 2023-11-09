@@ -1,6 +1,6 @@
 import { ListItem, UnorderedList } from "@chakra-ui/react";
 import Template from "./Template";
-import algorithmPicture from "@/assets/images/algorithm.png";
+import algorithmImage from "@/assets/images/algorithm-2.png";
 import { useContext, useEffect, useState } from "react";
 import { getLeaderboard } from "@/api";
 import AccountContext from "@/context/account";
@@ -57,7 +57,7 @@ const Intro2 = () => {
         </UnorderedList>
       }
       formula="0xer_referral_score = ( Σ(invitation_success x humanity_index) / h ) * 255"
-      algorithm={algorithmPicture}
+      algorithm={algorithmImage}
       totalParticipants={totalParticipants}
       userData={userData}
       leaderboard={leaderboard}
