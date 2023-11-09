@@ -12,7 +12,7 @@ import HDWalletProvider from "@truffle/hdwallet-provider";
 import ABI from "@/abi.json";
 import { useToast } from "@chakra-ui/react";
 import { getUser } from "@/api";
-import { asciiToHex } from "web3-utils";
+
 interface AccountContextType {
   account?: string;
   id?: number;
@@ -20,6 +20,7 @@ interface AccountContextType {
   submit: (signature: string) => Promise<string | null>;
   connect: (privateKey?: string) => void;
   getTokenId: () => Promise<number | undefined>;
+  getLastSyncTime: () => Promise<number | undefined>;
   fetchValues: () => Promise<string | undefined>;
   setValues: (param: string) => void;
   values?: string;
@@ -28,12 +29,14 @@ interface AccountContextType {
 const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS;
 const CHAIN_ID = parseInt(process.env.REACT_APP_CHAIN_ID || "0", 10);
 const RPC = process.env.REACT_APP_RPC || "";
+const RPC_L1 = process.env.REACT_APP_RPC_L1 || "";
 
 const AccountContext = createContext<AccountContextType>({
   connect: () => {},
   sign: async () => null,
   submit: async () => null,
   getTokenId: async () => undefined,
+  getLastSyncTime: async () => undefined,
   fetchValues: async () => undefined,
   setValues: () => undefined,
 });
@@ -54,6 +57,7 @@ const withAccountContext = (Component: ComponentType) => (props: any) => {
       const result = await contractRef.current.methods
         .tokenIdOf(account)
         .call();
+
       const id = parseInt(result);
       setId(id);
       return id;
@@ -194,6 +198,34 @@ const withAccountContext = (Component: ComponentType) => (props: any) => {
     [account, getTokenId, values]
   );
 
+  const getLastSyncTime = useCallback(async () => {
+    if (!values) return;
+    const contract = contractRef.current;
+    if (!account || !contract) return;
+    providerRef.current = (window as any).ethereum;
+    const provider = providerRef.current as any;
+    if (!provider) return;
+    try {
+      const blockNumber = await contract.methods
+        .getLastSyncTime(account)
+        .call();
+      const blockInfo = (await fetch(RPC_L1, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          method: "eth_getBlockByNumber",
+          params: [`0x${blockNumber.toString(16)}`, false],
+          jsonrpc: "2.0",
+          id: 1,
+        }),
+      }).then((response) => response.json())) as any;
+      return parseInt(blockInfo.result.timestamp, 16) * 1000;
+    } catch (e) {
+      console.error(e);
+      return undefined;
+    }
+  }, [account, values]);
+
   // detect account switch
   useEffect(() => {
     if (!providerRef.current) return;
@@ -244,6 +276,7 @@ const withAccountContext = (Component: ComponentType) => (props: any) => {
         sign,
         submit,
         getTokenId,
+        getLastSyncTime,
         fetchValues,
         setValues,
         values,

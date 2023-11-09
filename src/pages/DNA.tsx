@@ -21,12 +21,16 @@ import lockOpenLogo from "@/assets/images/lock-open.png";
 import communityLogo from "@/assets/images/community.png";
 import lightBulbLogo from "@/assets/images/Lightbulb.png";
 import { getLeaderboard, getSignature } from "@/api";
+import dayjs from "dayjs";
 
 const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
-  const { account, values, submit } = useContext(AccountContext);
+  const { account, values, submit, getLastSyncTime } =
+    useContext(AccountContext);
   const [verification, setVerification] = useState<
     Array<{ value: number; rank: number; total: number }>
   >([]);
+  const [onChainSyncAt, setOnChainSyncAt] = useState<number | undefined>();
+
   const toast = useToast();
 
   const authStatus = values ? parseInt(values.slice(0, 2), 16) : 0;
@@ -56,6 +60,7 @@ const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
     );
   }, [submit, toast]);
 
+  // fetch leaderboard data
   useEffect(() => {
     if (hasNFT)
       Promise.all([
@@ -68,6 +73,12 @@ const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
         )
       );
   }, [hasNFT]);
+
+  // get last sync time
+  useEffect(() => {
+    if (hasNFT)
+      getLastSyncTime().then((timestamp) => setOnChainSyncAt(timestamp));
+  }, [getLastSyncTime, hasNFT]);
 
   return (
     <Flex py={20} maxW={1440} mx="auto">
@@ -96,7 +107,10 @@ const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
             {/* @todo: connect real data time */}
             <Text color="black" fontWeight={300}>
               Last Update: 2023.07.15 22:12:00 <br />
-              On-Chain Update: 2023.07.15 22:12:00
+              On-Chain Update:{" "}
+              {onChainSyncAt == null
+                ? "--"
+                : dayjs(onChainSyncAt).format("YYYY.MM.DD hh:mm:ss")}
             </Text>
             <Box>
               <Button variant="outline" onClick={submitData}>
