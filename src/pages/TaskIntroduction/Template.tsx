@@ -1,13 +1,32 @@
+import {
+  ReactElement,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import {
+  Box,
+  Container,
+  Divider,
+  Flex,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
+import hljs from "highlight.js/lib/core";
+import python from "highlight.js/lib/languages/python";
 import AccountContext from "@/context/account";
-import { Box, Container, Divider, Flex, Image, Text } from "@chakra-ui/react";
-import { ReactElement, useContext, useState } from "react";
+
 import Leaderboard from "@/components/Leaderboard";
 import RankCard from "@/components/RankCard";
 import { Link } from "react-router-dom";
-import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { CopyIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import useScrollToTop from "@/libs/useScrollToTop";
 import dayjs from "dayjs";
 import Collapsible from "@/components/Collapsible";
+
+hljs.registerLanguage("python", python);
 
 enum Tabs {
   INTRO,
@@ -27,7 +46,7 @@ interface TaskIntroductionTemplateProps {
   };
   parameters: ReactElement | string;
   formula: ReactElement | string;
-  algorithm: string;
+  code: string;
   totalParticipants?: number;
   userData?: {
     value?: number;
@@ -48,7 +67,7 @@ const Template = ({
   task,
   parameters,
   formula,
-  algorithm,
+  code,
   totalParticipants,
   userData = {},
   leaderboard = {},
@@ -56,6 +75,21 @@ const Template = ({
   useScrollToTop();
   const { account } = useContext(AccountContext);
   const [tab, setTab] = useState(Tabs.INTRO);
+  const codeRef = useRef(null);
+  const toast = useToast();
+
+  const copyCode = useCallback(() => {
+    navigator.clipboard.writeText(code);
+    toast({ title: "Copied!", status: "success" });
+  }, [code, toast]);
+
+  useEffect(() => {
+    if (!codeRef.current) return;
+    (codeRef.current as any).innerHTML = hljs.highlight(code, {
+      language: "python",
+    }).value;
+  }, [code]);
+
   return (
     <Box minH="calc(100vh - 94px)" bg="black" p={{ base: 3, md: 12 }}>
       <Container maxW={1440}>
@@ -201,7 +235,19 @@ const Template = ({
                 }}
                 pb={4}
               >
-                <Image src={algorithm} />
+                <Box as="code" position="relative">
+                  <Box position="absolute" right={0} top={0} p={3}>
+                    <CopyIcon role="button" onClick={copyCode} />
+                  </Box>
+                  <Box
+                    whiteSpace="pre"
+                    p={2}
+                    ref={codeRef}
+                    maxW={800}
+                    mt={2}
+                    overflow="scroll"
+                  />
+                </Box>
               </Collapsible>
               <Divider mb={8} />
 

@@ -1,9 +1,27 @@
 import { ListItem, UnorderedList } from "@chakra-ui/react";
 import Template from "./Template";
-import algorithmImage from "@/assets/images/algorithm-3.png";
 import { useContext, useEffect, useState } from "react";
 import AccountContext from "@/context/account";
 import { getLeaderboard } from "@/api";
+
+const code = `
+# Define the function to calculate the scaled score of web3_knowledge_level
+def calculate_scaled_score(C, N):
+    # Calculate the accuracy rate A
+    A = C / N
+    
+    # Calculate the scaled score of web3_knowledge_level
+    web3_knowledge_level = int(A * 255)
+    
+    return web3_knowledge_level
+
+# Example case: 80 questions in total and 64 answered correctly
+C_example = 64
+N_example = 80
+
+# Calculate the scaled score for the example case
+web3_knowledge_level_example = calculate_scaled_score(C_example, N_example)
+`;
 
 const Intro3 = () => {
   const { account, accountInfo } = useContext(AccountContext);
@@ -61,7 +79,7 @@ const Intro3 = () => {
         </UnorderedList>
       }
       formula="web3_knowledge_level = [(C/N) * 255]"
-      algorithm={algorithmImage}
+      code={code}
       totalParticipants={totalParticipants}
       userData={userData}
       leaderboard={leaderboard}

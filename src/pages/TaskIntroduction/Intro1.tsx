@@ -1,9 +1,33 @@
 import { ListItem, UnorderedList } from "@chakra-ui/react";
 import Template from "./Template";
-import algorithmImage from "@/assets/images/algorithm-1.png";
 import { useContext, useEffect, useState } from "react";
 import AccountContext from "@/context/account";
 import { getLeaderboard } from "@/api";
+
+const code = `
+def calculate_humanity_index(recaptcha_v2, recaptcha_v3, sms_verification, biometric_verification):
+    # Weights for each verification method
+    w1 = 0.15  # Weight for reCAPTCHA v2
+    w2 = 0.20  # Weight for reCAPTCHA v3
+    w3 = 0.25  # Weight for SMS Verification
+    w4 = 0.40  # Weight for Biometric Verification
+    
+    # Calculate Humanity Index
+    humanity_index = (w1 * recaptcha_v2 + w2 * recaptcha_v3 + w3 * sms_verification + w4 * biometric_verification) * 255
+    
+    # Normalize Humanity Index to be between 0 and 1
+    normalized_humanity_index = humanity_index / 255.0
+    
+    return normalized_humanity_index
+
+# Example usage (you can ignore this part as per your request)
+# recaptcha_v2_value = 1
+# recaptcha_v3_value = 0.9
+# sms_verification_value = 1
+# biometric_verification_value = 1
+
+# result = calculate_humanity_index(recaptcha_v2_value, recaptcha_v3_value, sms_verification_value, biometric_verification_value)
+`;
 
 const Intro1 = () => {
   const { account, accountInfo } = useContext(AccountContext);
@@ -57,7 +81,7 @@ const Intro1 = () => {
         </UnorderedList>
       }
       formula="humanity_index = (w1 * recaptcha_v2 + w2 * recaptcha_v3 + w3 * sms_verification + w4 * biometric_verification) * 255"
-      algorithm={algorithmImage}
+      code={code}
       totalParticipants={totalParticipants}
       userData={userData}
       leaderboard={leaderboard}

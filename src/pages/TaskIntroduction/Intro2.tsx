@@ -1,9 +1,37 @@
 import { ListItem, UnorderedList } from "@chakra-ui/react";
 import Template from "./Template";
-import algorithmImage from "@/assets/images/algorithm-2.png";
 import { useContext, useEffect, useState } from "react";
 import { getLeaderboard } from "@/api";
 import AccountContext from "@/context/account";
+
+const code = `
+import math
+
+def calculate_0xer_referral_score(invitations):
+    h = 100000  # adjustment parameter
+    invitation_score = 0
+    
+    for invitation in invitations:
+        invitation_success = invitation['success']
+        humanity_index = invitation['humanity_index']
+        invitation_score += invitation_success * humanity_index
+    
+    # Calculate 0xer_referral_score
+    referral_score = (invitation_score / h) * 255
+    
+    return math.ceil(referral_score)  # Rounding up to the nearest integer
+
+# Example usage
+invitations_example = [
+    {'success': 1, 'humanity_index': 200},
+    {'success': 1, 'humanity_index': 150},
+    {'success': 0, 'humanity_index': 100},
+    {'success': 1, 'humanity_index': 255},
+    {'success': 1, 'humanity_index': 50}
+]
+
+result = calculate_0xer_referral_score(invitations_example)
+`;
 
 const Intro2 = () => {
   const { account, accountInfo } = useContext(AccountContext);
@@ -59,7 +87,7 @@ const Intro2 = () => {
         </UnorderedList>
       }
       formula="0xer_referral_score = ( Σ(invitation_success x humanity_index) / h ) * 255"
-      algorithm={algorithmImage}
+      code={code}
       totalParticipants={totalParticipants}
       userData={userData}
       leaderboard={leaderboard}
