@@ -29,7 +29,7 @@ enum STATUSES {
 
 const KnowledgeTest = () => {
   useScrollToTop();
-  const { account, values, id, getTokenId } = useContext(AccountContext);
+  const { account, accountInfo, id, getTokenId } = useContext(AccountContext);
   const [startAt, setStartAt] = useState(0);
   const [status, setStatus] = useState(STATUSES.IDLE);
   const [totalResponseTime, setTotalResponseTime] = useState(0);
@@ -102,7 +102,7 @@ const KnowledgeTest = () => {
   );
 
   useEffect(() => {
-    if (account && values) {
+    if (account && accountInfo) {
       Promise.all([getQuestions(), getUser()]).then(
         ([{ data }, { web3_test_results: web3TestResults = [] }]) => {
           setQuestions(data);
@@ -122,7 +122,7 @@ const KnowledgeTest = () => {
         }
       );
     }
-  }, [account, values]);
+  }, [account, accountInfo]);
 
   // fetch user token id first
   useEffect(() => {

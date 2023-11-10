@@ -20,7 +20,7 @@ import Web3 from "web3";
 
 const Referral = () => {
   useScrollToTop();
-  const { account, id, values, getTokenId } = useContext(AccountContext);
+  const { account, id, accountInfo, getTokenId } = useContext(AccountContext);
   const [references, setReferences] = useState([]);
   const toast = useToast();
 
@@ -41,7 +41,7 @@ const Referral = () => {
   }, [account, getTokenId]);
 
   useEffect(() => {
-    if (account && values) {
+    if (account && accountInfo) {
       getUser().then((user) => {
         setReferences(
           user.references?.map(({ id, joined_at: joinedAt }: any) => ({
@@ -51,7 +51,7 @@ const Referral = () => {
         );
       });
     }
-  }, [account, values]);
+  }, [account, accountInfo]);
 
   return (
     <Box minH="calc(100vh - 94px)" bg="black" p={{ base: 3, md: 12 }}>

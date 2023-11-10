@@ -6,7 +6,7 @@ import { getLeaderboard } from "@/api";
 import AccountContext from "@/context/account";
 
 const Intro2 = () => {
-  const { account, values } = useContext(AccountContext);
+  const { account, accountInfo } = useContext(AccountContext);
   const [leaderboard, setLeaderBoard] = useState<{
     data: Array<{ value: number; address: string }>;
   }>({ data: [] });
@@ -17,14 +17,14 @@ const Intro2 = () => {
   }>();
 
   useEffect(() => {
-    if (account && values)
+    if (account && accountInfo)
       getLeaderboard(0x50).then(({ data, length, user }) => {
         setLeaderBoard({ data });
 
         setUserData(user);
         setTotalParticipants(length);
       });
-  }, [account, values]);
+  }, [account, accountInfo]);
 
   return (
     <Template

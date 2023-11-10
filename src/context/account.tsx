@@ -13,6 +13,10 @@ import ABI from "@/abi.json";
 import { useToast } from "@chakra-ui/react";
 import { getUser } from "@/api";
 
+interface AccountInfo {
+  data: string;
+  updatedAt?: number;
+}
 interface AccountContextType {
   account?: string;
   id?: number;
@@ -22,8 +26,8 @@ interface AccountContextType {
   getTokenId: () => Promise<number | undefined>;
   getLastSyncTime: () => Promise<number | undefined>;
   fetchValues: () => Promise<string | undefined>;
-  setValues: (param: string) => void;
-  values?: string;
+  setAccountInfo: (param: any) => void;
+  accountInfo?: AccountInfo;
 }
 
 const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS;
@@ -38,14 +42,14 @@ const AccountContext = createContext<AccountContextType>({
   getTokenId: async () => undefined,
   getLastSyncTime: async () => undefined,
   fetchValues: async () => undefined,
-  setValues: () => undefined,
+  setAccountInfo: (info: AccountInfo) => undefined,
 });
 
 const withAccountContext = (Component: ComponentType) => (props: any) => {
   const providerRef = useRef<any>();
   const contractRef = useRef<any>();
   const [account, setAccount] = useState<string>();
-  const [values, setValues] = useState<string>();
+  const [accountInfo, setAccountInfo] = useState<AccountInfo>();
   const [id, setId] = useState<number>();
   const [chainId, setChainId] = useState<number>();
   const toast = useToast();
@@ -69,8 +73,8 @@ const withAccountContext = (Component: ComponentType) => (props: any) => {
 
   const fetchValues = useCallback(async () => {
     if (account) {
-      const { data } = await getUser();
-      setValues(data);
+      const { data, updated_at: updatedAt } = await getUser();
+      setAccountInfo({ data, updatedAt });
       return data;
     }
   }, [account]);
@@ -181,13 +185,13 @@ const withAccountContext = (Component: ComponentType) => (props: any) => {
 
   const submit = useCallback(
     async (signature: string) => {
-      if (!values) return;
+      if (!accountInfo) return;
       const contract = contractRef.current;
       if (!account || !contract) return;
       const id = await getTokenId();
       try {
         const { transactionHash } = await contract.methods
-          .update(id, `0x${values}`, signature)
+          .update(id, `0x${accountInfo.data}`, signature)
           .send();
         return transactionHash;
       } catch (e) {
@@ -195,16 +199,17 @@ const withAccountContext = (Component: ComponentType) => (props: any) => {
         return undefined;
       }
     },
-    [account, getTokenId, values]
+    [account, getTokenId, accountInfo]
   );
 
   const getLastSyncTime = useCallback(async () => {
-    if (!values) return;
+    if (!accountInfo) return;
     const contract = contractRef.current;
     if (!account || !contract) return;
     providerRef.current = (window as any).ethereum;
     const provider = providerRef.current as any;
     if (!provider) return;
+
     try {
       const blockNumber = await contract.methods
         .getLastSyncTime(account)
@@ -224,7 +229,7 @@ const withAccountContext = (Component: ComponentType) => (props: any) => {
       console.error(e);
       return undefined;
     }
-  }, [account, values]);
+  }, [account, accountInfo]);
 
   // detect account switch
   useEffect(() => {
@@ -278,8 +283,8 @@ const withAccountContext = (Component: ComponentType) => (props: any) => {
         getTokenId,
         getLastSyncTime,
         fetchValues,
-        setValues,
-        values,
+        setAccountInfo,
+        accountInfo,
       }}
     >
       <Component {...props} />

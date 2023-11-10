@@ -57,7 +57,7 @@ enum VerificationStatus {
 
 const Verify = () => {
   useScrollToTop();
-  const { account, values } = useContext(AccountContext);
+  const { account, accountInfo } = useContext(AccountContext);
   const [level, setLevel] = useState<number>(0);
   const [phone, setPhone] = useState("");
   const [countryCode, setCountryCode] = useState("+886");
@@ -186,11 +186,11 @@ const Verify = () => {
 
   // fetch verification status
   useEffect(() => {
-    if (account && values)
+    if (account && accountInfo)
       getUser().then(({ verification_results: verificationResults }) =>
         setLevel((verificationResults?.length || 0) + 1)
       );
-  }, [account, values]);
+  }, [account, accountInfo]);
 
   return (
     <>

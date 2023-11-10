@@ -24,7 +24,7 @@ import { getLeaderboard, getSignature } from "@/api";
 import dayjs from "dayjs";
 
 const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
-  const { account, values, submit, getLastSyncTime } =
+  const { account, accountInfo, submit, getLastSyncTime } =
     useContext(AccountContext);
   const [verification, setVerification] = useState<
     Array<{ value: number; rank: number; total: number }>
@@ -33,7 +33,9 @@ const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
 
   const toast = useToast();
 
-  const authStatus = values ? parseInt(values.slice(0, 2), 16) : 0;
+  const authStatus = accountInfo
+    ? parseInt(accountInfo.data.slice(0, 2), 16)
+    : 0;
   const hasNFT = !!account && !!authStatus;
 
   const submitData = useCallback(async () => {
@@ -101,12 +103,20 @@ const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
             <Box fontWeight="bold">{shortenAddress(account || "")}</Box>
           </Center>
         )}
-        <NFTRenderer values={values} size={{ base: "100%", lg: 750 }} />
+        <NFTRenderer
+          values={accountInfo?.data}
+          size={{ base: "100%", lg: 750 }}
+        />
         {hasNFT && (
           <Flex mt={5} gap={5} justifyContent="flex-end">
-            {/* @todo: connect real data time */}
             <Text color="black" fontWeight={300}>
-              Last Update: 2023.07.15 22:12:00 <br />
+              Last Update:{" "}
+              {accountInfo?.updatedAt == null
+                ? "--"
+                : dayjs(accountInfo?.updatedAt).format(
+                    "YYYY.MM.DD hh:mm:ss"
+                  )}{" "}
+              <br />
               On-Chain Update:{" "}
               {onChainSyncAt == null
                 ? "--"

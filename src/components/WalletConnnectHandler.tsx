@@ -19,7 +19,7 @@ import { useLiff } from "react-liff";
 import metamaskLogo from "@/assets/images/metamask.png";
 
 const WalletConnnectHandler = () => {
-  const { connect, account, setValues, sign } = useContext(AccountContext);
+  const { connect, account, setAccountInfo, sign } = useContext(AccountContext);
   const { isOpen, close } = useContext(WalletConnectionContext);
   const toast = useToast();
   const params = new URLSearchParams(window.location.search);
@@ -46,15 +46,15 @@ const WalletConnnectHandler = () => {
         localStorage.setItem("auth", accessToken);
       }
       const result = await getUser();
-      const { private_key: privateKey, data } = result;
+      const { private_key: privateKey, data, updated_at: updatedAt } = result;
       connect(privateKey);
-      setValues(data);
+      setAccountInfo({ data, updatedAt });
     }
 
     if (isFromLine) {
       lineAuth();
     }
-  }, [connect, isFromLine, liff, referrer, setValues]);
+  }, [connect, isFromLine, liff, referrer, setAccountInfo]);
 
   // normal wallet user flow
   useEffect(() => {
@@ -72,8 +72,8 @@ const WalletConnnectHandler = () => {
           if (accessToken) localStorage.setItem("auth", accessToken);
         }
         try {
-          const { data } = await getUser();
-          setValues(data);
+          const { data, updated_at: updatedAt } = await getUser();
+          setAccountInfo({ data, updatedAt });
         } catch (e) {
           toast({
             title:
@@ -83,7 +83,7 @@ const WalletConnnectHandler = () => {
         }
       })();
     }
-  }, [account, setValues, isFromLine, referrer, sign, toast]);
+  }, [account, isFromLine, referrer, sign, toast, setAccountInfo]);
 
   return (
     <Modal isOpen={isOpen && !account} onClose={close} isCentered>
