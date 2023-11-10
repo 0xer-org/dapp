@@ -10,6 +10,7 @@ const Intro1 = () => {
   const [leaderboard, setLeaderBoard] = useState<{
     data: Array<{ value: number; address: string }>;
   }>({ data: [] });
+  const [task, setTask] = useState({ startFrom: 0, endAt: 0 });
   const [totalParticipants, setTotalParticipants] = useState(0);
   const [userData, setUserData] = useState<{
     value: number;
@@ -18,12 +19,14 @@ const Intro1 = () => {
 
   useEffect(() => {
     if (account && accountInfo)
-      getLeaderboard(0x00).then(({ data, length, user }) => {
-        setLeaderBoard({ data });
-
-        setUserData(user);
-        setTotalParticipants(length);
-      });
+      getLeaderboard(0x00).then(
+        ({ data, length, user, start_from: startFrom, end_at: endAt }) => {
+          setLeaderBoard({ data });
+          setTask({ startFrom, endAt });
+          setUserData(user);
+          setTotalParticipants(length);
+        }
+      );
   }, [account, accountInfo]);
 
   return (
@@ -34,8 +37,7 @@ const Intro1 = () => {
       task={{
         index: 1,
         name: "Proof of Humanity",
-        startFrom: Date.now(),
-        endAt: Date.now(),
+        ...task,
       }}
       method="By passing different levels of authentication in Task #001, users obtain values provided by the authentication. These values are then processed through an algorithm to be allocated into a range between 0 and 255."
       parameters={

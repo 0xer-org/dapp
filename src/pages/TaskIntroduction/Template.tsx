@@ -144,8 +144,11 @@ const Template = ({
                 pb={4}
               >
                 <Text>
-                  {dayjs(task.startFrom).format("YYYY-MM-DD")} ~{" "}
-                  {dayjs(task.endAt).format("YYYY-MM-DD")}
+                  {task.startFrom
+                    ? `${dayjs(task.startFrom).format("YYYY-MM-DD")} ~ ${dayjs(
+                        task.endAt
+                      ).format("YYYY-MM-DD")}`
+                    : "Not Started Yet"}
                 </Text>
               </Collapsible>
               <Divider mb={8} />

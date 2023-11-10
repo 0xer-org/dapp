@@ -10,6 +10,7 @@ const Intro3 = () => {
   const [leaderboard, setLeaderBoard] = useState<{
     data: Array<{ value: number; address: string }>;
   }>({ data: [] });
+  const [task, setTask] = useState({ startFrom: 0, endAt: 0 });
   const [totalParticipants, setTotalParticipants] = useState(0);
   const [userData, setUserData] = useState<{
     value: number;
@@ -18,12 +19,14 @@ const Intro3 = () => {
 
   useEffect(() => {
     if (account && accountInfo)
-      getLeaderboard(0xc0).then(({ data, length, user }) => {
-        setLeaderBoard({ data });
-
-        setUserData(user);
-        setTotalParticipants(length);
-      });
+      getLeaderboard(0xc0).then(
+        ({ data, length, user, start_from: startFrom, end_at: endAt }) => {
+          setLeaderBoard({ data });
+          setTask({ startFrom, endAt });
+          setUserData(user);
+          setTotalParticipants(length);
+        }
+      );
   }, [account, accountInfo]);
 
   return (
@@ -34,8 +37,7 @@ const Intro3 = () => {
       task={{
         index: 3,
         name: "Web3 Knowledge Test",
-        startFrom: Date.now(),
-        endAt: Date.now(),
+        ...task,
       }}
       method="By calculating your total score from the Web3 Knowledge Test, you obtain a correctness ratio that is then compared with other participating 0xers. This relative ranking is converted into a value between 0 and 255."
       parameters={

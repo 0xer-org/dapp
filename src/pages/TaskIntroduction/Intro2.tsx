@@ -10,6 +10,7 @@ const Intro2 = () => {
   const [leaderboard, setLeaderBoard] = useState<{
     data: Array<{ value: number; address: string }>;
   }>({ data: [] });
+  const [task, setTask] = useState({ startFrom: 0, endAt: 0 });
   const [totalParticipants, setTotalParticipants] = useState(0);
   const [userData, setUserData] = useState<{
     value: number;
@@ -18,12 +19,14 @@ const Intro2 = () => {
 
   useEffect(() => {
     if (account && accountInfo)
-      getLeaderboard(0x50).then(({ data, length, user }) => {
-        setLeaderBoard({ data });
-
-        setUserData(user);
-        setTotalParticipants(length);
-      });
+      getLeaderboard(0x50).then(
+        ({ data, length, user, start_from: startFrom, end_at: endAt }) => {
+          setLeaderBoard({ data });
+          setTask({ startFrom, endAt });
+          setUserData(user);
+          setTotalParticipants(length);
+        }
+      );
   }, [account, accountInfo]);
 
   return (
@@ -34,8 +37,7 @@ const Intro2 = () => {
       task={{
         index: 2,
         name: "0xer Referral Mission",
-        startFrom: Date.now(),
-        endAt: Date.now(),
+        ...task,
       }}
       method="Calculate both the number of successful user invitations and the Humanity Index {0x(0000)} of the invited members from Task #002. Then, use an algorithm to compute these two values and convert them to a range between 0 and 255."
       parameters={
