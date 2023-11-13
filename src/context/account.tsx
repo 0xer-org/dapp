@@ -242,6 +242,7 @@ const withAccountContext = (Component: ComponentType) => (props: any) => {
       console.log(`Account changed to: ${accounts[0]}`);
       localStorage.removeItem("auth");
       setAccount(accounts[0]);
+      window.location.reload();
     };
     const networkChangedhandler = (networkId: string) => {
       console.log(`Account changed to: ${networkId}`);
