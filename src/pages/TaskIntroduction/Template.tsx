@@ -1,11 +1,4 @@
-import {
-  ReactElement,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ReactElement, useCallback, useContext, useState } from "react";
 import {
   Box,
   Container,
@@ -75,7 +68,6 @@ const Template = ({
   useScrollToTop();
   const { account } = useContext(AccountContext);
   const [tab, setTab] = useState(Tabs.INTRO);
-  const codeRef = useRef(null);
   const toast = useToast();
 
   const copyCode = useCallback(() => {
@@ -83,12 +75,9 @@ const Template = ({
     toast({ title: "Copied!", status: "success" });
   }, [code, toast]);
 
-  useEffect(() => {
-    if (!codeRef.current) return;
-    (codeRef.current as any).innerHTML = hljs.highlight(code, {
-      language: "python",
-    }).value;
-  }, [code]);
+  const highlightedCode = hljs.highlight(code, {
+    language: "python",
+  }).value;
 
   return (
     <Box minH="calc(100vh - 94px)" bg="black" p={{ base: 3, md: 12 }}>
@@ -242,10 +231,12 @@ const Template = ({
                   <Box
                     whiteSpace="pre"
                     p={2}
-                    ref={codeRef}
                     maxW={800}
                     mt={2}
                     overflow="scroll"
+                    dangerouslySetInnerHTML={{
+                      __html: highlightedCode,
+                    }}
                   />
                 </Box>
               </Collapsible>
