@@ -4,7 +4,9 @@ import {
   Container,
   Divider,
   Flex,
+  ListItem,
   Text,
+  UnorderedList,
   VStack,
   useToast,
 } from "@chakra-ui/react";
@@ -15,13 +17,15 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import AccountContext from "@/context/account";
 import createInviteUrl from "@/libs/createInviteUrl";
 import ReferralsOverview from "@/components/ReferralsOverview";
-import { getUser } from "@/api";
+import { getLeaderboard, getUser } from "@/api";
 import Web3 from "web3";
 
 const Referral = () => {
   useScrollToTop();
   const { account, id, accountInfo, getTokenId } = useContext(AccountContext);
   const [references, setReferences] = useState([]);
+  const [total, setTotal] = useState<number>();
+  const [rank, setRank] = useState<number>();
   const toast = useToast();
 
   const copyUrl = useCallback(() => {
@@ -50,6 +54,10 @@ const Referral = () => {
           }))
         );
       });
+      getLeaderboard(0x50).then(({ user, data }) => {
+        setTotal(data?.length || 0);
+        setRank(user?.rank);
+      });
     }
   }, [account, accountInfo]);
 
@@ -70,6 +78,16 @@ const Referral = () => {
                 late. As a human, you can bring more humans to join and make
                 blockchain the foundational infrastructure for anti-bots.
               </Text>
+              <Box>
+                <UnorderedList>
+                  <ListItem>
+                    Participants: {total ? total.toLocaleString() : "--"}
+                  </ListItem>
+                  <ListItem>
+                    Your Rank: {rank ? rank.toLocaleString() : "--"}
+                  </ListItem>
+                </UnorderedList>
+              </Box>
             </Box>
             <Divider my={6} />
             <Box>

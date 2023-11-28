@@ -15,6 +15,7 @@ import {
   Flex,
   Image,
   Input,
+  ListItem,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -22,6 +23,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  UnorderedList,
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -29,6 +31,7 @@ import {
 import StageCard from "@/components/StageCard";
 import { CheckIcon, CloseIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import {
+  getLeaderboard,
   getUser,
   sendSMSMessage,
   verifyOauthResponse,
@@ -60,6 +63,8 @@ const Verify = () => {
   const { account, accountInfo } = useContext(AccountContext);
   const [level, setLevel] = useState<number>(0);
   const [phone, setPhone] = useState("");
+  const [total, setTotal] = useState<number>();
+  const [rank, setRank] = useState<number>();
   const [countryCode, setCountryCode] = useState("+886");
   const [code, setCode] = useState("");
   const lineMode = isInLineBrowser();
@@ -186,10 +191,15 @@ const Verify = () => {
 
   // fetch verification status
   useEffect(() => {
-    if (account && accountInfo)
+    if (account && accountInfo) {
       getUser().then(({ verification_results: verificationResults }) =>
         setLevel((verificationResults?.length || 0) + 1)
       );
+      getLeaderboard(0x00).then(({ user, data }) => {
+        setTotal(data?.length || 0);
+        setRank(user?.rank);
+      });
+    }
   }, [account, accountInfo]);
 
   return (
@@ -401,6 +411,16 @@ const Verify = () => {
                     only used for identity or device recognition and will not
                     retain your personal information.
                   </Text>
+                  <Box>
+                    <UnorderedList>
+                      <ListItem>
+                        Participants: {total ? total.toLocaleString() : "--"}
+                      </ListItem>
+                      <ListItem>
+                        Your Rank: {rank ? rank.toLocaleString() : "--"}
+                      </ListItem>
+                    </UnorderedList>
+                  </Box>
                 </Box>
                 <Divider my={6} />
                 <Box>

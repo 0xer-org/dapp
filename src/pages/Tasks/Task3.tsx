@@ -5,8 +5,10 @@ import {
   Divider,
   Flex,
   Image,
+  ListItem,
   Progress,
   Text,
+  UnorderedList,
   VStack,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
@@ -17,7 +19,7 @@ import AccountContext from "@/context/account";
 import recaptchaLogo from "@/assets/images/recaptcha.png";
 import correctIcon from "@/assets/images/correct.png";
 import incorrectIcon from "@/assets/images/incorrect.png";
-import { answerQuestion, getQuestions, getUser } from "@/api";
+import { answerQuestion, getLeaderboard, getQuestions, getUser } from "@/api";
 import counterImage from "@/assets/images/counter.png";
 import Countdown from "@/components/Countdown";
 
@@ -33,6 +35,8 @@ const KnowledgeTest = () => {
   const [startAt, setStartAt] = useState(0);
   const [status, setStatus] = useState(STATUSES.IDLE);
   const [totalResponseTime, setTotalResponseTime] = useState(0);
+  const [total, setTotal] = useState<number>();
+  const [rank, setRank] = useState<number>();
   const [progress, setProgress] = useState(0);
   const [selected, setSelected] = useState(-1);
   const [score, setScore] = useState(0);
@@ -103,8 +107,15 @@ const KnowledgeTest = () => {
 
   useEffect(() => {
     if (account && accountInfo) {
-      Promise.all([getQuestions(), getUser()]).then(
-        ([{ data }, { web3_test_results: web3TestResults = [] }]) => {
+      Promise.all([getQuestions(), getUser(), getLeaderboard(0xc0)]).then(
+        ([
+          { data },
+          { web3_test_results: web3TestResults = [] },
+          {
+            data: { length },
+            user,
+          },
+        ]) => {
           setQuestions(data);
           setProgress(web3TestResults.length);
           setTotalResponseTime(
@@ -119,6 +130,8 @@ const KnowledgeTest = () => {
               0
             )
           );
+          setTotal(length || 0);
+          setRank(user?.rank);
         }
       );
     }
@@ -151,6 +164,16 @@ const KnowledgeTest = () => {
                 understanding and familiarity with this evolving ecosystem. The
                 higher your score, the more extensive your Web3 insights are.
               </Text>
+              <Box>
+                <UnorderedList>
+                  <ListItem>
+                    Participants: {total ? total.toLocaleString() : "--"}
+                  </ListItem>
+                  <ListItem>
+                    Your Rank: {rank ? rank.toLocaleString() : "--"}
+                  </ListItem>
+                </UnorderedList>
+              </Box>
             </Box>
             <Divider my={6} />
             <Box>
