@@ -45,16 +45,23 @@ const WalletConnnectHandler = () => {
 
         localStorage.setItem("auth", accessToken);
       }
-      const result = await getUser();
-      const { private_key: privateKey, data, updated_at: updatedAt } = result;
-      connect(privateKey);
-      setAccountInfo({ data, updatedAt });
+      try {
+        const result = await getUser();
+        const { private_key: privateKey, data, updated_at: updatedAt } = result;
+        connect(privateKey);
+        setAccountInfo({ data, updatedAt });
+      } catch (e) {
+        toast({
+          title: "Something went wrong, please refresh you page and try again.",
+        });
+        localStorage.removeItem("auth");
+      }
     }
 
     if (isFromLine) {
       lineAuth();
     }
-  }, [connect, isFromLine, liff, referrer, setAccountInfo]);
+  }, [connect, isFromLine, liff, referrer, setAccountInfo, toast]);
 
   // normal wallet user flow
   useEffect(() => {
