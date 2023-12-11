@@ -82,8 +82,9 @@ const Verify = () => {
         verifyOauthResponse({ provider: "google", account, token })
           .then(() => setVerificationStatus(VerificationStatus.SUCCESS))
           .catch(() => setVerificationStatus(VerificationStatus.ERROR));
+      else alert("Not connected");
     },
-    onError: () => {
+    onError: (e) => {
       setVerificationStatus(VerificationStatus.ERROR);
     },
   });
