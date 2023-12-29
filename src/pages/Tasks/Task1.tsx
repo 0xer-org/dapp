@@ -82,7 +82,6 @@ const Verify = () => {
         verifyOauthResponse({ provider: "google", account, token })
           .then(() => setVerificationStatus(VerificationStatus.SUCCESS))
           .catch(() => setVerificationStatus(VerificationStatus.ERROR));
-      else alert("Not connected");
     },
     onError: (e) => {
       setVerificationStatus(VerificationStatus.ERROR);
@@ -262,9 +261,7 @@ const Verify = () => {
                 case level === 1:
                   return (
                     <Box>
-                      <Text my={3}>
-                        按下 Google 人類驗證按鈕，證明你不是機器人
-                      </Text>
+                      <Text my={3}></Text>
                       <Text>Click Google ReCAPTCHA V2</Text>
                       <Box my={3}>
                         <RecaptchaV2
@@ -277,7 +274,6 @@ const Verify = () => {
                 case level === 2:
                   return (
                     <Box>
-                      <Text my={3}>進行手機簡訊驗證</Text>
                       <Text>
                         Enter your phone number, receive and enter the
                         verification code.
@@ -348,7 +344,6 @@ const Verify = () => {
                 case level === 3:
                   return (
                     <Box>
-                      <Text my={3}>用你的手機進行人臉登入或是指紋登入</Text>
                       <Text mb={4}>
                         Complete the verification using your Apple or Google
                         account.
@@ -369,7 +364,7 @@ const Verify = () => {
                           onClick={() => googleLogin()}
                         >
                           <Image width={4} src={googleLogo} mr={2} />
-                          Continue in with Google
+                          Continue with Google
                         </Button>
                         <Box>
                           <div
@@ -457,7 +452,6 @@ const Verify = () => {
                     current={level}
                     onStart={onOpen}
                   >
-                    <Text>按下 Google 人類驗證按鈕，證明你不是機器人</Text>
                     <Text>Click Google ReCAPTCHA V2</Text>
                     <Text fontSize="sm" fontWeight={300}>
                       (I'm not a Robot)
@@ -469,7 +463,6 @@ const Verify = () => {
                     current={level}
                     onStart={onOpen}
                   >
-                    <Text>進行手機簡訊驗證</Text>
                     <Text>Mobile SMS Identity</Text>
                   </StageCard>
                   <StageCard
@@ -478,7 +471,6 @@ const Verify = () => {
                     current={level}
                     onStart={onOpen}
                   >
-                    <Text>用你的手機進行人臉辨識或是指紋登入</Text>
                     <Text>Apple Face ID or Android Authentication</Text>
                   </StageCard>
                 </VStack>
