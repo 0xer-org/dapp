@@ -29,6 +29,8 @@ enum STATUSES {
   SCORE,
 }
 
+const FORCE_FAILED_OPTION = -2;
+
 const KnowledgeTest = () => {
   useScrollToTop();
   const { account, accountInfo, id, getTokenId } = useContext(AccountContext);
@@ -37,7 +39,14 @@ const KnowledgeTest = () => {
   const [totalResponseTime, setTotalResponseTime] = useState(0);
   const [total, setTotal] = useState<number>();
   const [rank, setRank] = useState<number>();
-  const [progress, setProgress] = useState(0);
+  const [saved, setSaved] = useState<
+    Array<{
+      correct: boolean;
+      index: number;
+      responseTime: number;
+    }>
+  >([]);
+  const [current, setCurrent] = useState(-1);
   const [selected, setSelected] = useState(-1);
   const [score, setScore] = useState(0);
   const [questions, setQuestions] = useState<
@@ -48,14 +57,32 @@ const KnowledgeTest = () => {
       image: string;
     }>
   >([]);
-  const question = questions[progress];
+  const question = questions[current];
+  const progress = saved.length;
+
+  const findRandomUnsolvedQuestion = useCallback(
+    (data: Array<{ index: number }>) => {
+      const solved = data.reduce((acc: any[], cur) => [...acc, cur.index], []);
+      const unsolved = Array.from({ length: questions.length })
+        .map((_, index) => index)
+        .filter((i) => !solved.includes(i));
+      const randomIndex = Math.floor(unsolved.length * Math.random());
+      console.log(solved);
+      console.log(unsolved);
+      console.log(randomIndex);
+      return unsolved[randomIndex];
+    },
+    [questions]
+  );
 
   const start = useCallback(() => {
     setSelected(-1);
     setStartAt(Date.now());
-    if (progress !== questions.length) setStatus(STATUSES.STARTED);
-    else setStatus(STATUSES.SCORE);
-  }, [progress, questions]);
+    if (saved.length !== questions.length) {
+      setStatus(STATUSES.STARTED);
+      setCurrent(findRandomUnsolvedQuestion(saved));
+    } else setStatus(STATUSES.SCORE);
+  }, [saved, questions.length, findRandomUnsolvedQuestion]);
 
   const onSelect = useCallback(
     (value: number) => async () => {
@@ -67,7 +94,7 @@ const KnowledgeTest = () => {
       }
       try {
         await answerQuestion({
-          index: progress,
+          index: current,
           selected: value,
           responseTime,
         });
@@ -75,8 +102,17 @@ const KnowledgeTest = () => {
         setTimeout(() => {
           setStartAt(Date.now());
           setSelected(-1);
-          setProgress(progress + 1);
-          if (progress === questions.length - 1) {
+          const newSaved = [
+            ...saved,
+            {
+              correct: value === question.answer,
+              index: current,
+              responseTime,
+            },
+          ];
+          setSaved(newSaved);
+          setCurrent(findRandomUnsolvedQuestion(newSaved));
+          if (newSaved.length === questions.length) {
             setStatus(STATUSES.SCORE);
           }
         }, 1000);
@@ -84,7 +120,16 @@ const KnowledgeTest = () => {
         console.error(e);
       }
     },
-    [progress, question, questions, score, startAt, totalResponseTime]
+    [
+      current,
+      findRandomUnsolvedQuestion,
+      question,
+      questions,
+      saved,
+      score,
+      startAt,
+      totalResponseTime,
+    ]
   );
 
   const computeSelectedStyle = useCallback(
@@ -117,7 +162,7 @@ const KnowledgeTest = () => {
           },
         ]) => {
           setQuestions(data);
-          setProgress(web3TestResults.length);
+          setSaved(web3TestResults);
           setTotalResponseTime(
             web3TestResults.reduce(
               (acc: number, cur: any) => acc + cur.response_time,
@@ -141,6 +186,26 @@ const KnowledgeTest = () => {
   useEffect(() => {
     if (account) getTokenId();
   }, [account, getTokenId]);
+
+  // auto select if user close the window
+  useEffect(() => {
+    if (status === STATUSES.STARTED) {
+      const handler = (e: any) => {
+        e.preventDefault();
+
+        const responseTime = Date.now() - startAt;
+        answerQuestion({
+          index: current,
+          selected: FORCE_FAILED_OPTION,
+          responseTime,
+        });
+
+        e.returnValue = true;
+      };
+      window.addEventListener("beforeunload", handler);
+      return () => window.removeEventListener("beforeunload", handler);
+    }
+  }, [current, startAt, status]);
 
   return (
     <Box minH="calc(100vh - 94px)" bg="black" p={{ base: 3, md: 12 }}>
@@ -286,7 +351,7 @@ const KnowledgeTest = () => {
                                   <Countdown
                                     from={10}
                                     resetTrigger={progress}
-                                    onFinish={onSelect(-2)}
+                                    onFinish={onSelect(FORCE_FAILED_OPTION)}
                                   />
                                 </Text>
                               </Box>
