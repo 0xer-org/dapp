@@ -1,5 +1,4 @@
-import { Flex, Image, Text } from "@chakra-ui/react";
-import logo from "@/assets/images/logo.png";
+import { Flex, Text } from "@chakra-ui/react";
 import isInLineBrowser from "@/libs/isInLineBrowser";
 
 const Footer = () => {
@@ -16,9 +15,7 @@ const Footer = () => {
       color="white"
       direction={{ base: "column", md: "row" }}
     >
-      <Text fontFamily="Aclonica" fontSize="1.25rem">
-        <Image src={logo} />
-      </Text>
+      <Text>{"{0x(er)}"}</Text>
       <Text maxW={{ base: "100%", lg: "40%" }} lineHeight={2}>
         © 2024 0xer.org
       </Text>

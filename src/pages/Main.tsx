@@ -3,7 +3,6 @@ import arbitrumLogo from "@/assets/images/arbitrum.png";
 import ChapterAccordion from "@/components/ChapterAccordion";
 import { RouteComponentProps } from "react-router-dom";
 import NFTRenderer from "@/components/NFTRenderer";
-import logo from "@/assets/images/logo.png";
 import { useEffect, useState } from "react";
 import { getTotalMint } from "@/libs";
 
@@ -123,7 +122,9 @@ const Main = ({ history }: { history: RouteComponentProps["history"] }) => {
         >
           Seal and encrypt the concept of You into the 0xer NFT
         </Text>
-        <Image src={logo} mt={8} width="100px" mx="auto" />
+        <Text mt={8} align="center" fontSize={"1.5rem"}>
+          {"{0x(er)}"}
+        </Text>
         <Flex
           gap={10}
           mt={10}

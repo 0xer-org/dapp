@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import AccountContext from "@/context/account";
 import NFTRenderer from "@/components/NFTRenderer";
-import { createAvatarUrl, shortenAddress } from "@/libs";
+import { createAvatarUrl } from "@/libs";
 import { RouteComponentProps } from "react-router-dom";
 import humanLogo from "@/assets/images/human.png";
 import lockOpenLogo from "@/assets/images/lock-open.png";
@@ -22,6 +22,7 @@ import communityLogo from "@/assets/images/community.png";
 import lightBulbLogo from "@/assets/images/Lightbulb.png";
 import { getLeaderboard, getSignature } from "@/api";
 import dayjs from "dayjs";
+import { CopyIcon } from "@chakra-ui/icons";
 
 const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
   const { account, accountInfo, submit, getLastSyncTime } =
@@ -62,6 +63,12 @@ const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
     );
   }, [submit, toast]);
 
+  const copyAddress = useCallback(() => {
+    if (account) {
+      navigator.clipboard.writeText(account);
+    }
+  }, [account]);
+
   // fetch leaderboard data
   useEffect(() => {
     if (hasNFT)
@@ -100,7 +107,15 @@ const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
               size={{ base: "xs", md: "sm" }}
             />
             <Box mx={3}>Owner</Box>
-            <Box fontWeight="bold">{shortenAddress(account || "")}</Box>
+            <Box fontWeight="bold">{account}</Box>
+            <CopyIcon
+              onClick={copyAddress}
+              mx={{ base: "auto", md: 2 }}
+              mt={{ base: 2, md: 0 }}
+              display={{ base: "block", md: "inline" }}
+              verticalAlign={-1}
+              role="button"
+            />
           </Center>
         )}
         <NFTRenderer
@@ -143,38 +158,43 @@ const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
               airdrop index for token distribution.
             </Text>
             <Flex direction="column" alignItems="stretch" gap={4}>
-              <Box
-                bg="#f5f5f5"
-                _hover={{ bg: "#e6e6e6" }}
-                px={8}
-                py={5}
-                cursor="pointer"
-              >
+              <Box bg="#f5f5f5" px={8} py={5}>
                 <Flex gap={4} align="center">
                   <Image src={humanLogo} width={10} height={10} />
                   <Box color="black">
-                    <Text mb={3}>#Humanity Index {"{0x(0000)}"}</Text>
+                    <Text
+                      mb={3}
+                      role="button"
+                      onClick={() => history.push("/task-introduction/1")}
+                    >
+                      #Humanity Index {"{0x(0000)}"}
+                    </Text>
                     <UnorderedList fontWeight={300}>
                       <ListItem>Value [{verification[0]?.value}/255]</ListItem>
                       <ListItem>
                         Rank [{verification[0]?.rank}/{verification[0]?.total}]
                       </ListItem>
-                      <ListItem>Task: #001 Proof of Humanity</ListItem>
+                      <ListItem
+                        role="button"
+                        onClick={() => history.push("/tasks/1")}
+                      >
+                        Task: #001 Proof of Humanity
+                      </ListItem>
                     </UnorderedList>
                   </Box>
                 </Flex>
               </Box>
-              <Box
-                bg="#f5f5f5"
-                _hover={{ bg: "#e6e6e6" }}
-                px={8}
-                py={5}
-                cursor="pointer"
-              >
+              <Box bg="#f5f5f5" px={8} py={5}>
                 <Flex gap={4} align="center">
                   <Image src={communityLogo} width={10} height={10} />
                   <Box color="black">
-                    <Text mb={3}>#Community Builder Index {"{0x(0050)}"}</Text>
+                    <Text
+                      mb={3}
+                      role="button"
+                      onClick={() => history.push("/task-introduction/2")}
+                    >
+                      #Community Builder Index {"{0x(0050)}"}
+                    </Text>
                     <UnorderedList fontWeight={300}>
                       <ListItem>
                         Value [{verification[1]?.value || 0}/255]
@@ -183,22 +203,25 @@ const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
                         Rank [{verification[1]?.rank || "--"}/
                         {verification[1]?.total || 0}]
                       </ListItem>
-                      <ListItem>Task: #002 Invite more humans to join</ListItem>
+                      <ListItem
+                        role="button"
+                        onClick={() => history.push("/tasks/2")}
+                      >
+                        Task: #002 Invite more humans to join
+                      </ListItem>
                     </UnorderedList>
                   </Box>
                 </Flex>
               </Box>
-              <Box
-                bg="#f5f5f5"
-                _hover={{ bg: "#e6e6e6" }}
-                px={8}
-                py={5}
-                cursor="pointer"
-              >
+              <Box bg="#f5f5f5" px={8} py={5}>
                 <Flex gap={4} align="center">
                   <Image src={lightBulbLogo} width={10} height={10} />
                   <Box color="black">
-                    <Text mb={3}>
+                    <Text
+                      mb={3}
+                      role="button"
+                      onClick={() => history.push("/task-introduction/3")}
+                    >
                       #Web3 Knowledge Level Index {"{0x(00C0)}"}
                     </Text>
                     <UnorderedList fontWeight={300}>
@@ -209,7 +232,12 @@ const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
                         Rank [{verification[2]?.rank || "--"}/
                         {verification[2]?.total || 0}]
                       </ListItem>
-                      <ListItem>Task: #003 Web3 Knowledge Test</ListItem>
+                      <ListItem
+                        role="button"
+                        onClick={() => history.push("/tasks/3")}
+                      >
+                        Task: #003 Web3 Knowledge Test
+                      </ListItem>
                     </UnorderedList>
                   </Box>
                 </Flex>

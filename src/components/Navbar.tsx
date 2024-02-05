@@ -28,9 +28,9 @@ import {
 } from "@chakra-ui/icons";
 import AccountContext from "@/context/account";
 import { useContext, useEffect } from "react";
-import logo from "@/assets/images/logo.png";
 import openseaLogo from "@/assets/images/opensea.png";
 import twitterLogo from "@/assets/images/x.png";
+import warpcastLogo from "@/assets/images/warpcast.png";
 import isInLineBrowser from "@/libs/isInLineBrowser";
 
 // @todo: add social links
@@ -51,12 +51,35 @@ const DesktopNavigation = () => (
         </MenuItem>
       </MenuList>
     </Menu>
-    <RouterLink to="/">Whitepaper</RouterLink>
-    <RouterLink to="/">Airdrop</RouterLink>
+    <Link
+      href="https://whitepaper.0xer.org"
+      target="_blank"
+      rel="noreferrer noopener"
+    >
+      Whitepaper
+    </Link>
+    <Link
+      href="https://whitepaper.0xer.org/airdrop"
+      target="_blank"
+      rel="noreferrer noopener"
+    >
+      Airdrop
+    </Link>
     <RouterLink to="/dna">MyDNA</RouterLink>
-    <RouterLink to="/">
+    <Link
+      href="https://x.com/0xer_org"
+      target="_blank"
+      rel="noreferrer noopener"
+    >
       <Image src={twitterLogo} width="2.5rem" />
-    </RouterLink>
+    </Link>
+    <Link
+      href="https://warpcast.com/0xer"
+      target="_blank"
+      rel="noreferrer noopener"
+    >
+      <Image src={warpcastLogo} width="2.25rem" />
+    </Link>
     <Link
       href="https://testnets.opensea.io/collection/0xer-1"
       target="_blank"
@@ -107,12 +130,35 @@ const MobileNavigation = () => {
                   <RouterLink to="/tasks/3">Task #003</RouterLink>
                 </VStack>
               </Collapse>
-              <RouterLink to="/">Whitepaper</RouterLink>
-              <RouterLink to="/">Airdrop</RouterLink>
+              <Link
+                href="https://whitepaper.0xer.org"
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                Whitepaper
+              </Link>
+              <Link
+                href="https://whitepaper.0xer.org/airdrop"
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                Airdrop
+              </Link>
               <RouterLink to="/dna">MyDNA</RouterLink>
-              <RouterLink to="/">
+              <Link
+                href="https://x.com/0xer_org"
+                target="_blank"
+                rel="noreferrer noopener"
+              >
                 <Image src={twitterLogo} width="2.5rem" />
-              </RouterLink>
+              </Link>
+              <Link
+                href="https://warpcast.com/0xer"
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                <Image src={warpcastLogo} width="2.25rem" />
+              </Link>
               <Link
                 href="https://testnets.opensea.io/collection/0xer-1"
                 target="_blank"
@@ -149,7 +195,7 @@ const Navbar = () => {
     >
       <RouterLink to="/">
         <Flex align="center">
-          <Image src={logo} />
+          <Text>{"{0x(er)}"}</Text>
         </Flex>
       </RouterLink>
       <Flex

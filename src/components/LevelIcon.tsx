@@ -17,6 +17,7 @@ const LevelIcon = ({
     color="#52534F"
     borderColor="accent"
     textAlign="center"
+    lineHeight="20px"
     fontSize={10}
   >
     {level}
