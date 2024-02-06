@@ -81,7 +81,7 @@ const DesktopNavigation = () => (
       <Image src={warpcastLogo} width="2.25rem" />
     </Link>
     <Link
-      href="https://testnets.opensea.io/collection/0xer-1"
+      href="https://opensea.io/collection/0xer"
       target="_blank"
       rel="noreferrer noopener"
     >
@@ -160,7 +160,7 @@ const MobileNavigation = () => {
                 <Image src={warpcastLogo} width="2.25rem" />
               </Link>
               <Link
-                href="https://testnets.opensea.io/collection/0xer-1"
+                href="https://opensea.io/collection/0xer"
                 target="_blank"
                 rel="noreferrer noopener"
               >
