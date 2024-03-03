@@ -165,7 +165,7 @@ const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
                     <Text
                       mb={3}
                       role="button"
-                      onClick={() => history.push("/task-introduction/1")}
+                      onClick={() => history.push("/dna/1")}
                     >
                       #Humanity Index {"{0x(0000)}"}
                     </Text>
@@ -191,7 +191,7 @@ const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
                     <Text
                       mb={3}
                       role="button"
-                      onClick={() => history.push("/task-introduction/2")}
+                      onClick={() => history.push("/dna/2")}
                     >
                       #Community Builder Index {"{0x(0050)}"}
                     </Text>
@@ -220,7 +220,7 @@ const DNA = ({ history }: { history: RouteComponentProps["history"] }) => {
                     <Text
                       mb={3}
                       role="button"
-                      onClick={() => history.push("/task-introduction/3")}
+                      onClick={() => history.push("/dna/3")}
                     >
                       #Web3 Knowledge Level Index {"{0x(00C0)}"}
                     </Text>

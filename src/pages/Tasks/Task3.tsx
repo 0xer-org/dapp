@@ -249,7 +249,7 @@ const KnowledgeTest = () => {
                 <Text fontWeight={300} pr={2}>
                   Web3 Knowledge Level {"{0x(0050)}"}
                 </Text>
-                <Link to="/task-introduction/3">
+                <Link to="/dna/3">
                   <ExternalLinkIcon />
                 </Link>
               </Flex>

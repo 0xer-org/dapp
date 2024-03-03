@@ -16,7 +16,7 @@ const App = () => (
     <Box marginTop="94px">
       <Switch>
         <Route exact path="/" component={Main} />
-        <Route path="/task-introduction/:id" component={TaskIntroduction} />
+        <Route path="/dna/:id" component={TaskIntroduction} />
         <Route path="/tasks/:id" component={Tasks} />
         <Route path="/dna" component={DNA} />
       </Switch>

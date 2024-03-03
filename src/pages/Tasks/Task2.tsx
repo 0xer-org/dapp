@@ -98,7 +98,7 @@ const Referral = () => {
                 <Text fontWeight={300} pr={2}>
                   0xer Referral Score {"{0x(00C0)}"}
                 </Text>
-                <Link to="/task-introduction/2">
+                <Link to="/dna/2">
                   <ExternalLinkIcon />
                 </Link>
               </Flex>

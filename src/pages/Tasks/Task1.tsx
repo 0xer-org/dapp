@@ -427,7 +427,7 @@ const Verify = () => {
                     <Text fontWeight={300} pr={2}>
                       Humanity Index {"{0x(0000)}"}
                     </Text>
-                    <Link to="/task-introduction/1">
+                    <Link to="/dna/1">
                       <ExternalLinkIcon />
                     </Link>
                   </Flex>

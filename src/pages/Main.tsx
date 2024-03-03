@@ -6,6 +6,8 @@ import NFTRenderer from "@/components/NFTRenderer";
 import { useEffect, useState } from "react";
 import { getTotalMint } from "@/libs";
 
+const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS;
+
 const Main = ({ history }: { history: RouteComponentProps["history"] }) => {
   const [totalMint, setTotalMint] = useState(0);
 
@@ -60,7 +62,13 @@ const Main = ({ history }: { history: RouteComponentProps["history"] }) => {
             Mint Your NFT
           </Button>
           <Text mt={2}>Free gas for minting NFT</Text>
-          <Image my={5} width="5rem" src={arbitrumLogo} />
+          <Link
+            href={`https://arbiscan.io/address/${CONTRACT_ADDRESS}`}
+            rel="noreferrer noopener"
+            target="_blank"
+          >
+            <Image my={5} width="5rem" src={arbitrumLogo} />
+          </Link>
         </Flex>
       </Flex>
       {/* Jumbotron end */}

@@ -192,10 +192,15 @@ const withAccountContext = (Component: ComponentType) => (props: any) => {
       try {
         const { transactionHash } = await contract.methods
           .update(id, `0x${accountInfo.data}`, signature)
-          .send();
+          .send({ gas: 6000000 });
         return transactionHash;
       } catch (e) {
         console.error(e);
+        contract.methods
+          .update(id, `0x${accountInfo.data}`, signature)
+          .estimateGas()
+          .then(console.log)
+          .catch(console.error);
         return undefined;
       }
     },
